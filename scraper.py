@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-import unicodedata
 import uni2ascii
 
 def get_resistance_multipliers(soup):
@@ -16,7 +15,13 @@ def get_resistance_multipliers(soup):
             pair = (values[0], 1)
         result.append(pair)
     return result
-        
+    
+def get_element_types(soup):
+    types = soup.find("ul", "details").findAll("span")
+    result = []
+    for type in types:
+        result.append(uni2ascii.unicode_to_ascii(type.text))
+    return result
 
 base = "http://www.azurilland.com/pokedex/"
 gen = "gen-1/"
@@ -29,5 +34,10 @@ page = requests.get(base+gen+"/1")
 
 soup = BeautifulSoup(page.text, "lxml")
 
+#RESISTANCES
 resistances = get_resistance_multipliers(soup)
 print(resistances)
+
+#ELEMENT TYPES
+types = get_element_types(soup)
+print(types)
