@@ -39,6 +39,12 @@ CREATE TABLE PokemonType(
    CONSTRAINT PT_FK_T FOREIGN KEY(typeId) REFERENCES Type(id)
 );
 
+CREATE TABLE PokemonCost(
+   pId INT,
+   cost INT,
+   CONSTRAINT P_PK_P PRIMARY KEY(pId)
+);
+
 CREATE TABLE Users(
    id INT,
    username VARCHAR(64),
