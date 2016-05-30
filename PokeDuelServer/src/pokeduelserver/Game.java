@@ -5,11 +5,13 @@ import java.util.List;
 
 public class Game {
     private List<Player> players;
-    private int playerOneLife;
-    private int playerTwoLife;
+    private int playerOneWins;
+    private int playerTwoWins;
     
     public Game(List<Player> players) {
         players = new ArrayList();
+        playerOneWins = 0;
+        playerTwoWins = 0;
     }
     
     public int doBattle(Selection s1, Selection s2) {
@@ -59,10 +61,14 @@ public class Game {
         poke2Attack = poke2Attack * (1/poke2.numTypes);
         poke1Defense = poke1Defense * (1/poke1.numTypes);
         
-        if ((poke1Attack - poke2Defense) > (poke2Attack - poke1Defense))
+        if ((poke1Attack - poke2Defense) > (poke2Attack - poke1Defense)) {
+            playerOneWins++;
             return s1.playerId;
-        else
+        }
+        else {
+            playerTwoWins++;
             return s2.playerId;
+        }
     }
     
     public void addPlayer(Player player) {
