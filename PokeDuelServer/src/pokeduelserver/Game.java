@@ -5,13 +5,16 @@ import java.util.List;
 
 public class Game {
     private List<Player> players;
-    private int playerOneWins;
-    private int playerTwoWins;
+    private GameStates state;
     
     public Game(List<Player> players) {
         players = new ArrayList();
-        playerOneWins = 0;
-        playerTwoWins = 0;
+        state = GameStates.WAITING_JOIN_PLAYER_1;
+    }
+    
+    public GameStates getState()
+    {
+        return this.state;
     }
     
     public int doBattle(Selection s1, Selection s2) {
