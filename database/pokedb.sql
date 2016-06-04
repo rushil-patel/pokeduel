@@ -7,7 +7,8 @@ CREATE TABLE PokemonStats(
    sDef INT,
    speed INT,
    overall INT,
-   CONSTRAINT S_PK PRIMARY KEY(pId)
+   CONSTRAINT PS_UNIQUE UNIQUE(pId),
+   CONSTRAINT PS_FK FOREIGN KEY(pId) REFERENCES Pokemon(id)
 );
 
 CREATE TABLE Pokemon(
@@ -28,7 +29,7 @@ CREATE TABLE Resistance(
    pId INT,
    typeId INT,
    mult DECIMAL(4,2),
-   CONSTRAINT R_FK_S FOREIGN KEY(pId) REFERENCES PokemonStats(pId),
+   CONSTRAINT R_FK_S FOREIGN KEY(pId) REFERENCES Pokemon(id),
    CONSTRAINT R_FK_T FOREIGN KEY(typeId) REFERENCES Type(id)
 );
 
