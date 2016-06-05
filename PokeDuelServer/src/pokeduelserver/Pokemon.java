@@ -15,9 +15,10 @@ public class Pokemon {
     public int[] resistances;
     public int[] types;
     public int numTypes;
+    public boolean isAlive;
     
     public Pokemon(int id, String name, int cost, int[] stats, String sprite,
-            int[] resistances, int[] types, int numTypes)
+            int[] resistances, int[] types, int numTypes, boolean isAlive)
     {
         this.id = id;
         this.name = name;
@@ -27,6 +28,7 @@ public class Pokemon {
         this.resistances = resistances;
         this.types = types;
         this.numTypes = numTypes;
+        this.isAlive = isAlive;
     }
     
 }
