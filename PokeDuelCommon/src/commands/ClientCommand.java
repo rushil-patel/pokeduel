@@ -22,5 +22,6 @@ public enum ClientCommand implements Command {
     /**
      * Left Game
      */
-    LEAVE_GAME;
+    LEAVE_GAME,
+    LOAD_POKEMON;
 }

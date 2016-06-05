@@ -14,5 +14,6 @@ public enum ServerCommand implements Command {
     SUCCESS_LOGIN,
     BATTLE_RESULT,
     PLAYER_UPDATE,
-    OPPONENT_UPDATE;
+    OPPONENT_UPDATE,
+    POKEMON_DATA;
 }
