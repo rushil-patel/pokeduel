@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import gameelements.Game;
 import player.Player;
-import pokeduelserver.DBConnection;
+import connectors.DBConnection;
 import gameelements.GameStates;
 import pokemon.Pokemon;
 import wrappers.NetworkWrapper;

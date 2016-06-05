@@ -1,0 +1,58 @@
+-- This returns every pokemon (1-151) with their sprite, stat, and types
+SELECT
+   P.id, P.name, PC.cost,
+   PS.hp, PS.att, PS.def, PS.sAtt, PS.sDef, PS.speed, P.sprite,
+   type1, type2, numTypes
+FROM Pokemon P
+   JOIN PokemonStats PS ON P.id = PS.pId
+   JOIN 
+      (SELECT *
+      FROM  (SELECT
+               PT1.pId,
+               T1.id AS type1,
+               T1.name AS typeName1,
+               T2.id AS type2,
+               T2.name AS typeName2,
+               '2' AS numTypes
+            FROM PokemonType PT1
+               JOIN PokemonType PT2 ON PT1.pId = PT2.pId
+               JOIN Type T1 ON PT1.typeId = T1.id
+               JOIN Type T2 ON PT2.typeId = T2.id
+            WHERE T1.id < T2.id
+            ORDER BY PT1.pId) X
+      UNION ALL
+         (SELECT
+            PT1.pId,
+            T1.id AS type1,
+            T1.name AS typeName1,
+            0 AS type2,
+            0 AS typeName2,
+            '1' AS numTypes
+         FROM PokemonType PT1
+            JOIN PokemonType PT2 ON PT1.pId = PT2.pId
+            JOIN Type T1 ON PT1.typeId = T1.id
+            JOIN Type T2 ON PT2.typeId = T2.id
+         GROUP BY PT1.pId
+         HAVING COUNT(*) = 1
+         ORDER BY PT1.pId)
+      ORDER BY pId) Y ON P.id = Y.pId
+   JOIN PokemonCost PC ON P.id = PC.pId
+;
+
+-- This returns every resistance multiplier in order for every pokemon
+SELECT DISTINCT P.id, P.name,
+GROUP_CONCAT(R.mult ORDER BY R.typeId) AS res
+FROM Pokemon P
+   JOIN Resistance R ON P.id = R.pId
+GROUP BY P.id;
+
+-- Inser new User with given 'username'
+INSERT INTO Users VALUES
+   (NULL, <insert username here>, 0, 0)
+;
+
+-- If it returns smth, then the username exists
+-- Or use it to get the Play object based on 'username'
+SELECT *
+FROM Users U
+WHERE U.username = <insert username here>;
