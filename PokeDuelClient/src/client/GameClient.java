@@ -2,10 +2,16 @@
 package client;
 import ui.Display;
 import com.lloseng.ocsf.client.ObservableClient;
+import commands.ClientCommand;
+import commands.ServerCommand;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ui.Login;
+import pokemon.Pokemon;
+import ui.LoginPanel;
+import wrappers.NetworkWrapper;
 
 /**
  *
@@ -21,12 +27,29 @@ public class GameClient extends ObservableClient
         
         displayFrame = new Display();
         displayFrame.setVisible(true);
-        displayFrame.setContentPane(new Login());
+        displayFrame.setContentPane(new LoginPanel());
+    }
+    
+    @Override 
+    public void handleMessageFromServer(Object message)
+    {
+        NetworkWrapper net = (NetworkWrapper) message;
+        
+         switch ((ServerCommand) net.getCommand())
+        {
+            case POKEMON_DATA:
+                doLoadPokemon((ArrayList<Pokemon>) net.getCommand());
+                break;
+           
+        }
+    }
+
+    private void doLoadPokemon(List<Pokemon> list)
+    {
     }
     
     
-    
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
         String hostaddr = "localhost";
         int port = 6666;
@@ -38,6 +61,8 @@ public class GameClient extends ObservableClient
         {
             Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        client.sendToServer(new NetworkWrapper(ClientCommand.LOAD_POKEMON, port));
         
         
     }

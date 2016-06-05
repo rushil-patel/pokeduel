@@ -14,35 +14,39 @@ import gameelements.Game;
 import player.Player;
 import connectors.DBConnection;
 import gameelements.GameStates;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import pokemon.Pokemon;
 import wrappers.NetworkWrapper;
 
-
-public class GameServer  extends ObservableServer {
+public class GameServer extends ObservableServer
+{
 
     private GameManager gMan;
-    
     public List<Game> games;
     private Map<ConnectionToClient, Player> connectionUsers;
     private Map<Player, ConnectionToClient> userConnection;
-    
+
     public GameServer(int port)
     {
         super(port);
         gMan = new GameManager();
-        
+
         connectionUsers = new HashMap<>();
         userConnection = new HashMap<>();
     }
-    
+
     @Override
-    protected void handleMessageFromClient(Object msg, 
-                                            ConnectionToClient client)
+    protected void handleMessageFromClient(Object msg,
+            ConnectionToClient client)
     {
         NetworkWrapper net = (NetworkWrapper) msg;
-        
-        switch((ClientCommand)net.getCommand())
+
+        switch ((ClientCommand) net.getCommand())
         {
+            case LOAD_POKEMON:
+                //doLoadPokemon
+                break;
             case LOGIN:
                 //doLogin
                 break;
@@ -59,25 +63,36 @@ public class GameServer  extends ObservableServer {
                 break;
         }
     }
-    
 
-    
+    private void doLoadPokemon(NetworkWrapper net, ConnectionToClient client)
+    {
+        try
+        {
+            List<Pokemon> pokemonList = DBConnection.getAllPokeStatsAndMult();
+            NetworkWrapper pokemonData = new NetworkWrapper(
+                    ServerCommand.POKEMON_DATA, pokemonList);
+            client.sendToClient(pokemonData);
+        } catch (Exception ex)
+        {
+            Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     private void doBattleSelection(NetworkWrapper net, ConnectionToClient client) throws IOException
     {
         Player player = connectionUsers.get(client);
         Pokemon pmon = (Pokemon) net.getObject();
-        
+
         gMan.setPlayerBattleSelection(player, pmon);
     }
-    
+
     private void doTeamSelection(NetworkWrapper net, ConnectionToClient client)
     {
         Player player = connectionUsers.get(client);
-        ArrayList<Pokemon> team  = (ArrayList<Pokemon>) net.getObject();
+        ArrayList<Pokemon> team = (ArrayList<Pokemon>) net.getObject();
         gMan.setPlayerTeam(player, team);
-        
+
     }
-    
 
     private void doLogin(NetworkWrapper net, ConnectionToClient client) throws IOException
     {
@@ -104,46 +119,61 @@ public class GameServer  extends ObservableServer {
                 break;
             }
         }
-        
+
         if (!userLoggedIn)
         {
             //WAIT FOR SEONG 
             //if user in db
-                //load from db ad add to map
+            //load from db ad add to map
             //else 
-                //add new user to db and and map
-            
+            //add new user to db and and map
             //sent login success to client with player object
-            
         }
     }
-    
+
     private void doFindGame(NetworkWrapper net, ConnectionToClient client) throws IOException
     {
         Player player = connectionUsers.get(client);
         gMan.addPlayerToGame(player);
     }
-    
+
     public void addPlayerAndConnection(Player player, ConnectionToClient client)
     {
         userConnection.put(player, client);
         connectionUsers.put(client, player);
     }
-    
+
     public void removeFromMaps(Player player)
     {
         connectionUsers.remove(userConnection.get(player));
         userConnection.remove(player);
     }
+
     public void removeFromMaps(ConnectionToClient client)
     {
         userConnection.remove(connectionUsers.get(client));
         connectionUsers.remove(client);
     }
-    
+
     @Override
     public void clientDisconnected(ConnectionToClient client)
     {
         removeFromMaps(client);
+    }
+
+    public static void main(String[] args)
+    {
+
+        GameServer server = new GameServer(6666);
+        try
+        {
+            server.listen();
+        } catch (IOException ex)
+        {
+            Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+
     }
 }
