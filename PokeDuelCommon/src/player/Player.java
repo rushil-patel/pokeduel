@@ -7,13 +7,19 @@ public class Player {
     private int id;
     private String username;
     private ArrayList<Pokemon> team;
-    public final ConnectionToClient client;
+    public ConnectionToClient client;
     public Pokemon currentPokemon;
     
     public Player(int id, String username, ConnectionToClient client) {
         this.id = id;
         this.username = username;
         this.client = client;
+    }
+    
+    public Player(int id, String username) {
+        this.id = id;
+        this.username = username;
+        this.client = null;
     }
     
     public int getId() {
