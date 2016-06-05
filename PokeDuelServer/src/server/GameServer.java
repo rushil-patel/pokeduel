@@ -46,6 +46,7 @@ public class GameServer extends ObservableServer
         {
             case LOAD_POKEMON:
                 //doLoadPokemon
+                doLoadPokemon(net, client);
                 break;
             case LOGIN:
                 //doLogin

@@ -1,11 +1,13 @@
 package pokemon;
 
+import java.io.Serializable;
+
 
 /**
  *
  * @author rushi_000
  */
-public class Pokemon {
+public class Pokemon implements Serializable {
     
     public int id;
     public String name;
