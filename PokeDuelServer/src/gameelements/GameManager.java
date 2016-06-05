@@ -1,16 +1,14 @@
 package gameelements;
 
-import Commands.ServerCommand;
+import commands.ServerCommand;
 import com.lloseng.ocsf.server.ConnectionToClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import pokeduelserver.Game;
-import pokeduelserver.GameStates;
 import player.Player;
-import pokeduelserver.Pokemon;
+import pokemon.Pokemon;
 import wrappers.NetworkWrapper;
 
 public class GameManager

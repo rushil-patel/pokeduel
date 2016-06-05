@@ -1,4 +1,4 @@
-package pokeduelserver;
+package pokemon;
 
 
 /**

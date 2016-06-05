@@ -1,5 +1,5 @@
 
-package pokeduelserver;
+package gameelements;
 
 /**
  *

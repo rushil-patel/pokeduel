@@ -1,7 +1,7 @@
 package server;
 
-import Commands.ClientCommand;
-import Commands.ServerCommand;
+import commands.ClientCommand;
+import commands.ServerCommand;
 import com.lloseng.ocsf.server.ObservableServer;
 import com.lloseng.ocsf.server.ConnectionToClient;
 import gameelements.GameManager;
@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import pokeduelserver.Game;
+import gameelements.Game;
 import player.Player;
 import pokeduelserver.DBConnection;
-import pokeduelserver.GameStates;
-import pokeduelserver.Pokemon;
+import gameelements.GameStates;
+import pokemon.Pokemon;
 import wrappers.NetworkWrapper;
 
 

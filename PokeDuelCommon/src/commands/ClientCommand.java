@@ -1,5 +1,5 @@
 
-package Commands;
+package commands;
 
 public enum ClientCommand implements Command {
     

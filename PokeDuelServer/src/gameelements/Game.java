@@ -1,5 +1,7 @@
-package pokeduelserver;
+package gameelements;
 
+import pokemon.Pokemon;
+import pokemon.Stats;
 import player.Player;
 import java.util.ArrayList;
 import java.util.List;
