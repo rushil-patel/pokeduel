@@ -5,7 +5,7 @@ import com.lloseng.ocsf.client.ObservableClient;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ui.Login;
+import ui.LoginPanel;
 
 /**
  *
@@ -21,7 +21,7 @@ public class GameClient extends ObservableClient
         
         displayFrame = new Display();
         displayFrame.setVisible(true);
-        displayFrame.setContentPane(new Login());
+        displayFrame.setContentPane(new LoginPanel());
     }
     
     
