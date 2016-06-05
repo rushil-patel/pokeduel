@@ -9,12 +9,12 @@ package ui;
  *
  * @author seongbo
  */
-public class GameScreen extends javax.swing.JPanel {
+public class GameScreenPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form gameScreen
      */
-    public GameScreen() {
+    public GameScreenPanel() {
         initComponents();
     }
 

@@ -9,12 +9,12 @@ package ui;
  *
  * @author seongbo
  */
-public class RequestBattle extends javax.swing.JPanel {
+public class RequestBattlePanel extends javax.swing.JPanel {
 
     /**
      * Creates new form newJPanel
      */
-    public RequestBattle() {
+    public RequestBattlePanel() {
         initComponents();
     }
 
