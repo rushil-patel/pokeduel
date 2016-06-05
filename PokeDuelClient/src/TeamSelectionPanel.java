@@ -7,12 +7,12 @@
  *
  * @author seongbo
  */
-public class newJPanel1 extends javax.swing.JPanel {
+public class TeamSelectionPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form newJPanel1
      */
-    public newJPanel1() {
+    public TeamSelectionPanel() {
         initComponents();
         jTable1.setTableHeader(null);
     }

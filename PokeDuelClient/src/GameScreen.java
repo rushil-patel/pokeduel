@@ -7,12 +7,12 @@
  *
  * @author seongbo
  */
-public class gameScreen extends javax.swing.JPanel {
+public class GameScreen extends javax.swing.JPanel {
 
     /**
      * Creates new form gameScreen
      */
-    public gameScreen() {
+    public GameScreen() {
         initComponents();
     }
 

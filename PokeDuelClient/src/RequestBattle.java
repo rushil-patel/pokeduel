@@ -7,12 +7,12 @@
  *
  * @author seongbo
  */
-public class newJPanel extends javax.swing.JPanel {
+public class RequestBattle extends javax.swing.JPanel {
 
     /**
      * Creates new form newJPanel
      */
-    public newJPanel() {
+    public RequestBattle() {
         initComponents();
     }
 
