@@ -1,14 +1,20 @@
 package server;
 
 import Commands.ClientCommand;
+import Commands.ServerCommand;
 import com.lloseng.ocsf.server.ObservableServer;
 import com.lloseng.ocsf.server.ConnectionToClient;
 import gameelements.GameManager;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import pokeduelserver.Game;
-import pokeduelserver.Player;
+import player.Player;
+import pokeduelserver.DBConnection;
+import pokeduelserver.GameStates;
+import pokeduelserver.Pokemon;
 import wrappers.NetworkWrapper;
 
 
@@ -17,7 +23,7 @@ public class GameServer  extends ObservableServer {
     private GameManager gMan;
     
     public List<Game> games;
-    private Map<ConnectionToClient, Player> connectionUser;
+    private Map<ConnectionToClient, Player> connectionUsers;
     private Map<Player, ConnectionToClient> userConnection;
     
     public GameServer(int port)
@@ -25,7 +31,7 @@ public class GameServer  extends ObservableServer {
         super(port);
         gMan = new GameManager();
         
-        connectionUser = new HashMap<>();
+        connectionUsers = new HashMap<>();
         userConnection = new HashMap<>();
     }
     
@@ -44,17 +50,37 @@ public class GameServer  extends ObservableServer {
                 //doFindGame
                 break;
             case GIVE_TEAM:
+                //doTeamSelect
                 break;
             case GIVE_BATTLE_SELECT:
+                //doBattleSelection
                 break;
             case LEAVE_GAME:
                 break;
         }
     }
     
-    private void doLogin(NetworkWrapper net)
+
+    
+    private void doBattleSelection(NetworkWrapper net, ConnectionToClient client) throws IOException
     {
-        String username = (String) net.getObject();
+        Player player = connectionUsers.get(client);
+        Pokemon pmon = (Pokemon) net.getObject();
+        
+        gMan.setPlayerBattleSelection(player, pmon);
+    }
+    
+    private void doTeamSelection(NetworkWrapper net, ConnectionToClient client)
+    {
+        Player player = connectionUsers.get(client);
+        ArrayList<Pokemon> team  = (ArrayList<Pokemon>) net.getObject();
+        gMan.setPlayerTeam(player, team);
+        
+    }
+    
+
+    private void doLogin(NetworkWrapper net, ConnectionToClient client) throws IOException
+    {
         //IF player exists in map with same username
         //THEN return error to client
         //ELSE IF player exists in database
@@ -65,28 +91,54 @@ public class GameServer  extends ObservableServer {
         //      insert new player information into database
         //      create new player object
         //      put player into user connections map.
+        String username = (String) net.getObject();
+        boolean userLoggedIn = false;
+        for (Player player : connectionUsers.values())
+        {
+            if (player.getName().equals(username))
+            {
+                NetworkWrapper failedLogin = new NetworkWrapper(
+                        ServerCommand.ERROR_LOGIN, "Username is taken");
+                client.sendToClient(failedLogin);
+                userLoggedIn = true;
+                break;
+            }
+        }
+        
+        if (!userLoggedIn)
+        {
+            //WAIT FOR SEONG 
+            //if user in db
+                //load from db ad add to map
+            //else 
+                //add new user to db and and map
+            
+            //sent login success to client with player object
+            
+        }
     }
     
-    private void doFindGame(NetworkWrapper net)
+    private void doFindGame(NetworkWrapper net, ConnectionToClient client) throws IOException
     {
-        //GameManager.addPlayerToGame()
+        Player player = connectionUsers.get(client);
+        gMan.addPlayerToGame(player);
     }
     
     public void addPlayerAndConnection(Player player, ConnectionToClient client)
     {
         userConnection.put(player, client);
-        connectionUser.put(client, player);
+        connectionUsers.put(client, player);
     }
     
     public void removeFromMaps(Player player)
     {
-        connectionUser.remove(userConnection.get(player));
+        connectionUsers.remove(userConnection.get(player));
         userConnection.remove(player);
     }
     public void removeFromMaps(ConnectionToClient client)
     {
-        userConnection.remove(connectionUser.get(client));
-        connectionUser.remove(client);
+        userConnection.remove(connectionUsers.get(client));
+        connectionUsers.remove(client);
     }
     
     @Override

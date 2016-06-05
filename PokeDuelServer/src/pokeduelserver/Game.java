@@ -1,53 +1,35 @@
 package pokeduelserver;
 
+import player.Player;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Game {
     private List<Player> players;
-    private GameStates state;
+    public GameStates state;
     
     public Game(List<Player> players) {
         players = new ArrayList();
         state = GameStates.WAITING_JOIN_PLAYER_1;
     }
     
-    public GameStates getState()
+    public final List<Player> getPlayers()
     {
-        return this.state;
+        return this.players;
     }
     
-    public int doBattle(Selection s1, Selection s2) {
-        Pokemon poke1 = null, poke2 = null;
+    public Player doBattle()
+    {
+        Player p1 = players.get(0);
+        Player p2 = players.get(1);
         
-        for (Player player: players) {
-            if (s1.playerId == player.getId()) {
-                for (Pokemon poke: player.team) {
-                    if (s1.pId == poke.id)
-                        poke1 = poke;
-                }
-                if (poke1 == null)
-                    return s2.playerId;
-            }
-            else
-                return s2.playerId;
-        }
-        
-        for (Player player: players) {
-            if (s2.playerId == player.getId()) {
-                for (Pokemon poke: player.team) {
-                    if (s2.pId == poke.id)
-                        poke2 = poke;
-                }
-                if (poke2 == null)
-                    return s1.playerId;
-            }
-            else
-                return s1.playerId;
-        }
-        
+        Pokemon poke1 = p1.currentPokemon;
+        Pokemon poke2 = p2.currentPokemon;
+              
         int poke1Attack = 0, poke1Defense = 0;
         int poke2Attack = 0, poke2Defense = 0;
+        
         for (int type: poke1.types) {
             poke1Attack +=  poke1.stats[Stats.ATTACK.getValue()]*poke2.resistances[type];
             poke2Defense += poke2.stats[Stats.DEFENSE.getValue()]*poke1.resistances[type];     
@@ -65,15 +47,33 @@ public class Game {
         poke1Defense = poke1Defense * (1/poke1.numTypes);
         
         if ((poke1Attack - poke2Defense) > (poke2Attack - poke1Defense)) {
-            playerOneWins++;
-            return s1.playerId;
+            
+            //update pokemon status
+            p2.updatePokemon(poke2);
+            return p1;
+        }
+        else if ((poke1Attack - poke2Defense) < (poke2Attack - poke1Defense))
+        {
+            //update pokemon status
+            p1.updatePokemon(poke1);
+            return p2;
         }
         else {
-            playerTwoWins++;
-            return s2.playerId;
+            int value = new Random().nextInt(2);
+            
+            if (value > 1)
+            {
+                return p2;
+            }
+            else
+            {
+                return p1;
+            }
         }
+        
+
     }
-    
+     
     public void addPlayer(Player player) {
         players.add(player);
     }
