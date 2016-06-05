@@ -27,59 +27,59 @@ public class GameScreenPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
+        spriteOne = new javax.swing.JLabel();
+        spriteTwo = new javax.swing.JLabel();
+        usernameOneText = new javax.swing.JLabel();
+        usernameTwoText = new javax.swing.JLabel();
+        button_one_one = new javax.swing.JButton();
+        button_one_two = new javax.swing.JButton();
+        button_one_three = new javax.swing.JButton();
+        button_one_four = new javax.swing.JButton();
+        button_one_five = new javax.swing.JButton();
+        button_one_six = new javax.swing.JButton();
+        button_two_one = new javax.swing.JButton();
+        button_two_two = new javax.swing.JButton();
+        button_two_three = new javax.swing.JButton();
+        button_two_four = new javax.swing.JButton();
+        button_two_five = new javax.swing.JButton();
+        button_two_six = new javax.swing.JButton();
 
-        jLabel1.setText("Sprite1");
+        spriteOne.setText("Sprite1");
 
-        jLabel2.setText("Sprite2");
+        spriteTwo.setText("Sprite2");
 
-        jLabel15.setText("username1");
+        usernameOneText.setText("username1");
 
-        jLabel16.setText("username2");
+        usernameTwoText.setText("username2");
 
-        jButton1.setText("poke1.1");
+        button_one_one.setText("poke1.1");
 
-        jButton2.setText("poke1.2");
+        button_one_two.setText("poke1.2");
 
-        jButton3.setText("poke1.3");
+        button_one_three.setText("poke1.3");
 
-        jButton4.setText("poke1.4");
+        button_one_four.setText("poke1.4");
 
-        jButton5.setText("poke1.5");
+        button_one_five.setText("poke1.5");
 
-        jButton6.setText("poke1.6");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        button_one_six.setText("poke1.6");
+        button_one_six.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                button_one_sixActionPerformed(evt);
             }
         });
 
-        jButton7.setText("poke2.1");
+        button_two_one.setText("poke2.1");
 
-        jButton8.setText("poke2.2");
+        button_two_two.setText("poke2.2");
 
-        jButton9.setText("poke2.3");
+        button_two_three.setText("poke2.3");
 
-        jButton10.setText("poke2.4");
+        button_two_four.setText("poke2.4");
 
-        jButton11.setText("poke2.5");
+        button_two_five.setText("poke2.5");
 
-        jButton12.setText("poke2.6");
+        button_two_six.setText("poke2.6");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -87,44 +87,42 @@ public class GameScreenPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton7)
+                .addComponent(button_two_one)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(spriteTwo, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
+                                .addComponent(usernameOneText)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel15)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1)
+                                .addComponent(button_one_one)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)
+                                .addComponent(button_one_two)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)
+                                .addComponent(button_one_three)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton4)
+                                .addComponent(button_one_four)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton5)))
+                                .addComponent(button_one_five)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6)
+                        .addComponent(button_one_six)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(spriteOne, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton8)
+                        .addComponent(button_two_two)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton9)
+                        .addComponent(button_two_three)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton10)
+                        .addComponent(button_two_four)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton11)
+                        .addComponent(button_two_five)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton12)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
-                        .addComponent(jLabel16)
+                        .addComponent(button_two_six)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 563, Short.MAX_VALUE)
+                        .addComponent(usernameTwoText)
                         .addGap(122, 122, 122))))
         );
         layout.setVerticalGroup(
@@ -132,50 +130,50 @@ public class GameScreenPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton7)
-                    .addComponent(jButton8)
-                    .addComponent(jButton9)
-                    .addComponent(jButton10)
-                    .addComponent(jButton11)
-                    .addComponent(jButton12)
-                    .addComponent(jLabel16))
+                    .addComponent(button_two_one)
+                    .addComponent(button_two_two)
+                    .addComponent(button_two_three)
+                    .addComponent(button_two_four)
+                    .addComponent(button_two_five)
+                    .addComponent(button_two_six)
+                    .addComponent(usernameTwoText))
                 .addGap(32, 32, 32)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(spriteTwo, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 310, Short.MAX_VALUE)
+                .addComponent(spriteOne, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6)
-                    .addComponent(jButton5)
-                    .addComponent(jButton4)
-                    .addComponent(jButton3)
-                    .addComponent(jButton2)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel15))
+                    .addComponent(button_one_six)
+                    .addComponent(button_one_five)
+                    .addComponent(button_one_four)
+                    .addComponent(button_one_three)
+                    .addComponent(button_one_two)
+                    .addComponent(button_one_one)
+                    .addComponent(usernameOneText))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void button_one_sixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_one_sixActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_button_one_sixActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton button_one_five;
+    private javax.swing.JButton button_one_four;
+    private javax.swing.JButton button_one_one;
+    private javax.swing.JButton button_one_six;
+    private javax.swing.JButton button_one_three;
+    private javax.swing.JButton button_one_two;
+    private javax.swing.JButton button_two_five;
+    private javax.swing.JButton button_two_four;
+    private javax.swing.JButton button_two_one;
+    private javax.swing.JButton button_two_six;
+    private javax.swing.JButton button_two_three;
+    private javax.swing.JButton button_two_two;
+    private javax.swing.JLabel spriteOne;
+    private javax.swing.JLabel spriteTwo;
+    private javax.swing.JLabel usernameOneText;
+    private javax.swing.JLabel usernameTwoText;
     // End of variables declaration//GEN-END:variables
 }
