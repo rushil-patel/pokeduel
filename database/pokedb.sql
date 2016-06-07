@@ -1,3 +1,10 @@
+CREATE TABLE Pokemon(
+   id INT,
+   name VARCHAR(32),
+   sprite VARCHAR(64),
+   CONSTRAINT P_PK PRIMARY KEY(id)
+);
+
 CREATE TABLE PokemonStats(
    pId INT,
    hp INT,
@@ -9,13 +16,6 @@ CREATE TABLE PokemonStats(
    overall INT,
    CONSTRAINT PS_UNIQUE UNIQUE(pId),
    CONSTRAINT PS_FK FOREIGN KEY(pId) REFERENCES Pokemon(id)
-);
-
-CREATE TABLE Pokemon(
-   id INT,
-   name VARCHAR(32),
-   sprite VARCHAR(64),
-   CONSTRAINT P_PK PRIMARY KEY(id)
 );
 
 CREATE TABLE Type(
