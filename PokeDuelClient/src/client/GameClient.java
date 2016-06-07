@@ -38,7 +38,7 @@ public class GameClient extends ObservableClient
          switch ((ServerCommand) net.getCommand())
         {
             case POKEMON_DATA:
-                doLoadPokemon((ArrayList<Pokemon>) net.getCommand());
+                doLoadPokemon((ArrayList<Pokemon>) net.getObject());
                 break;
            
         }
@@ -46,6 +46,8 @@ public class GameClient extends ObservableClient
 
     private void doLoadPokemon(List<Pokemon> list)
     {
+        // finish up
+        //store data  in model class
     }
     
     
