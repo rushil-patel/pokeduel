@@ -5,6 +5,7 @@ import commands.ClientCommand;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import player.Player;
 import player.Profile;
 import wrappers.NetworkWrapper;
@@ -140,6 +141,7 @@ public class RequestBattlePanel extends javax.swing.JPanel {
     {//GEN-HEADEREND:event_humanBattleButtonActionPerformed
         try
         {
+            ((JButton)evt.getSource()).setEnabled(false);
             client.sendToServer(new NetworkWrapper(
                     ClientCommand.FIND_GAME_HUMAN, null));
         } catch (IOException ex)
@@ -152,6 +154,7 @@ public class RequestBattlePanel extends javax.swing.JPanel {
     {//GEN-HEADEREND:event_computerBattleButtonActionPerformed
          try
         {
+            ((JButton)evt.getSource()).setEnabled(false);
             client.sendToServer(new NetworkWrapper(
                     ClientCommand.FIND_GAME_COMPUTER, null));
         } catch (IOException ex)

@@ -23,7 +23,6 @@ public class GameServer extends ObservableServer
 {
 
     private GameManager gMan;
-    public List<Game> games;
     private Map<ConnectionToClient, Player> connectionUsers;
     private Map<Player, ConnectionToClient> userConnection;
 
@@ -61,13 +60,27 @@ public class GameServer extends ObservableServer
                 doTeamSelection(net, client);
                 break;
             case GIVE_BATTLE_SELECT:
-                //doBattleSelection
+                doBattleSelection(net, client);
                 break;
             case LEAVE_GAME:
+                doLeaveGame(net, client);
                 break;
         }
     }
-
+    
+        private void doLeaveGame(NetworkWrapper net, ConnectionToClient client)
+    {
+        Player player = connectionUsers.get(client);
+        Game game = gMan.getGameForPlayer(player);
+        if (game != null)
+        {
+            if (game.state == GameStates.GAME_OVER)
+            {
+                gMan.removeGame(game);
+            }
+        }
+    }
+    
     private void doLoadPokemon(NetworkWrapper net, ConnectionToClient client)
     {
         try

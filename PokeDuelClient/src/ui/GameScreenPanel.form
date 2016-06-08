@@ -19,13 +19,16 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="button_two_one" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="spriteTwo" min="-2" pref="184" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="usernameOneText" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace pref="524" max="32767" attributes="0"/>
+                              <Component id="OpponentSelectionLabel" min="-2" pref="184" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
+                              <Component id="playerNameLabel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="button_one_one" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -43,22 +46,27 @@
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <Component id="spriteOne" min="-2" pref="189" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="button_two_two" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="button_two_three" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="button_two_four" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="button_two_five" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="button_two_six" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="563" max="32767" attributes="0"/>
-                      <Component id="usernameTwoText" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="playerSelectionLabel" min="-2" pref="189" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="button_two_two" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="button_two_three" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="button_two_four" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="button_two_five" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="button_two_six" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="387" max="32767" attributes="0"/>
+                              <Component id="opponentNameLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                   </Group>
               </Group>
           </Group>
@@ -75,12 +83,12 @@
                   <Component id="button_two_four" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="button_two_five" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="button_two_six" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="usernameTwoText" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="opponentNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-              <Component id="spriteTwo" min="-2" pref="149" max="-2" attributes="0"/>
-              <EmptySpace pref="310" max="32767" attributes="0"/>
-              <Component id="spriteOne" min="-2" pref="167" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+              <Component id="OpponentSelectionLabel" min="-2" pref="149" max="-2" attributes="0"/>
+              <EmptySpace pref="199" max="32767" attributes="0"/>
+              <Component id="playerSelectionLabel" min="-2" pref="167" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="button_one_six" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -89,7 +97,7 @@
                   <Component id="button_one_three" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="button_one_two" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="button_one_one" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="usernameOneText" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="playerNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -97,88 +105,58 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="spriteOne">
+    <Component class="javax.swing.JLabel" name="playerSelectionLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Sprite1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="spriteTwo">
+    <Component class="javax.swing.JLabel" name="OpponentSelectionLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Sprite2"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="usernameOneText">
+    <Component class="javax.swing.JLabel" name="playerNameLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="username1"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="usernameTwoText">
+    <Component class="javax.swing.JLabel" name="opponentNameLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="username2"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="button_one_one">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke1.1"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_one_oneActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="button_one_two">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke1.2"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="button_one_three">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke1.3"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_one_threeActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="button_one_four">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke1.4"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="button_one_five">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke1.5"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="button_one_six">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke1.6"/>
-      </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="button_one_sixActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="button_two_one">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke2.1"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="button_two_two">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke2.2"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="button_two_three">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke2.3"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="button_two_four">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke2.4"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="button_two_five">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke2.5"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="button_two_six">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="poke2.6"/>
-      </Properties>
     </Component>
   </SubComponents>
 </Form>

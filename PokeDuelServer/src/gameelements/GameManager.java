@@ -35,6 +35,14 @@ public class GameManager
         com.requestTeam();
         games.add(game);       
     }
+    
+    
+    
+    public void removeGame(Game game)
+    {
+        games.remove(game);
+    }
+
     public void addPlayerToHumanGame(Player player) throws IOException
     {
         Game game;
@@ -54,9 +62,9 @@ public class GameManager
                 Player p2 = game.getPlayers().get(1);
 
                 NetworkWrapper oppNotif0 = new NetworkWrapper(
-                        ServerCommand.OPPONENT_FOUND, p1);
+                        ServerCommand.OPPONENT_FOUND, p1.getProfile());
                 NetworkWrapper oppNotif1 = new NetworkWrapper(
-                        ServerCommand.OPPONENT_FOUND, p2);
+                        ServerCommand.OPPONENT_FOUND, p2.getProfile());
                 
                 p1.send(oppNotif0);
                 p2.send(oppNotif1);
@@ -100,40 +108,6 @@ public class GameManager
             {
                 players.get(idx).currentPokemon = pmon;
                 game.setPlayerPokemon(pmon, player.getId());
-//                if (game.state == GameStates.WAITING_TWO_BATTLE)
-//                {
-//                    game.state = GameStates.WAITING_ONE_BATTLE;
-//                } 
-//                else if (game.state == GameStates.WAITING_ONE_BATTLE)
-//                {
-//                    players.get(0).send(
-//                            new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
-//                            players.get(1)));
-//                    players.get(1).send(
-//                            new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
-//                            players.get(0)));
-//                    
-//                    Player winner = game.doBattle();
-//
-//                    players.get(0).send(
-//                            new NetworkWrapper(ServerCommand.BATTLE_RESULT,
-//                            winner));
-//                    players.get(1).send(
-//                            new NetworkWrapper(ServerCommand.BATTLE_RESULT,
-//                            winner));
-//                    
-//                    players.get(0).send(
-//                            new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
-//                            players.get(0)));
-//                    players.get(1).send(
-//                            new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
-//                            players.get(1)));
-//                    
-//                    game.state = GameStates.WAITING_TWO_BATTLE;
-//                    
-//                    players.get(0).requestSelection();
-//                    players.get(1).requestSelection();
-//                }
                 return;
             }
         }
@@ -162,7 +136,7 @@ public class GameManager
         }
     }
 
-    private Game getGameForPlayer(Player player)
+    public Game getGameForPlayer(Player player)
     {
         for (Game game : games)
         {

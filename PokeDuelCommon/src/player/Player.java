@@ -97,7 +97,8 @@ public class Player implements Serializable
         {
             if (team.get(idx).id == newPokemon.id)
             {
-                team.get(idx).isAlive = false;
+                newPokemon.isAlive = false;
+                team.set(idx, newPokemon);
             }
         }
     }
@@ -117,4 +118,6 @@ public class Player implements Serializable
     {
         return new Profile(this);
     }
+    
+    
 }

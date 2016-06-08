@@ -1,25 +1,115 @@
 package ui;
 
+import client.GameClient;
+import commands.ClientCommand;
+import commands.ServerCommand;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import model.BattleModel;
+import pokemon.Pokemon;
+import wrappers.NetworkWrapper;
 
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author seongbo
  */
 public class GameScreenPanel extends javax.swing.JPanel implements Observer
 {
-   
+
+    private JButton[] playerTeamButtons;
+    private JButton[] opponentTeamButtons;
+    private List<Pokemon> playerTeam;
+    private GameClient client;
+
     /**
      * Creates new form gameScreen
      */
-    public GameScreenPanel() {
+    public GameScreenPanel(GameClient client)
+    {
+
         initComponents();
+        this.client = client;
+        playerTeam = new ArrayList();
+        playerTeamButtons = new JButton[]
+        {
+            button_one_one, button_one_two, button_one_three, button_one_four, button_one_five, button_one_six
+        };
+
+
+        opponentTeamButtons = new JButton[]
+        {
+            button_two_six, button_two_five, button_two_four, button_two_three, button_two_two, button_two_one
+        };
+
+        for (JButton button : playerTeamButtons)
+        {
+            button.setContentAreaFilled(false);
+            button.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    JButton buttonClicked = (JButton) e.getSource();
+                    List<JButton> playerButtonList = Arrays.asList(playerTeamButtons);
+                    List<JButton> oppButtonList = Arrays.asList(opponentTeamButtons);
+                    if (playerButtonList.contains(buttonClicked))
+                    {
+                        int idx = playerButtonList.indexOf(buttonClicked);
+                        Pokemon selected = playerTeam.get(idx);
+                        doSelectPokemon(selected);
+                    }
+                }
+            });
+            //button.setBorder(null);
+        }
+        for (JButton button : opponentTeamButtons)
+        {
+            button.setEnabled(false);
+            button.setContentAreaFilled(false);
+            button.setBorder(null);
+        }
+
+
+    }
+
+    private void doSelectPokemon(Pokemon chosen)
+    {
+        System.out.println("Selected: " + chosen.name);
+        try
+        {
+            NetworkWrapper net = new NetworkWrapper(ClientCommand.GIVE_BATTLE_SELECT,
+                    chosen);
+            client.sendToServer(net);
+            playerSelectionLabel.setIcon(new ImageIcon("res/" + chosen.sprite));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(GameScreenPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        for (JButton button : playerTeamButtons)
+        {
+            button.setEnabled(false);
+        }
+
     }
 
     /**
@@ -29,12 +119,13 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
-        spriteOne = new javax.swing.JLabel();
-        spriteTwo = new javax.swing.JLabel();
-        usernameOneText = new javax.swing.JLabel();
-        usernameTwoText = new javax.swing.JLabel();
+        playerSelectionLabel = new javax.swing.JLabel();
+        OpponentSelectionLabel = new javax.swing.JLabel();
+        playerNameLabel = new javax.swing.JLabel();
+        opponentNameLabel = new javax.swing.JLabel();
         button_one_one = new javax.swing.JButton();
         button_one_two = new javax.swing.JButton();
         button_one_three = new javax.swing.JButton();
@@ -48,42 +139,37 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
         button_two_five = new javax.swing.JButton();
         button_two_six = new javax.swing.JButton();
 
-        spriteOne.setText("Sprite1");
+        playerSelectionLabel.setText("Sprite1");
 
-        spriteTwo.setText("Sprite2");
+        OpponentSelectionLabel.setText("Sprite2");
 
-        usernameOneText.setText("username1");
+        playerNameLabel.setText("username1");
 
-        usernameTwoText.setText("username2");
+        opponentNameLabel.setText("username2");
 
-        button_one_one.setText("poke1.1");
-
-        button_one_two.setText("poke1.2");
-
-        button_one_three.setText("poke1.3");
-
-        button_one_four.setText("poke1.4");
-
-        button_one_five.setText("poke1.5");
-
-        button_one_six.setText("poke1.6");
-        button_one_six.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button_one_sixActionPerformed(evt);
+        button_one_one.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                button_one_oneActionPerformed(evt);
             }
         });
 
-        button_two_one.setText("poke2.1");
+        button_one_three.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                button_one_threeActionPerformed(evt);
+            }
+        });
 
-        button_two_two.setText("poke2.2");
-
-        button_two_three.setText("poke2.3");
-
-        button_two_four.setText("poke2.4");
-
-        button_two_five.setText("poke2.5");
-
-        button_two_six.setText("poke2.6");
+        button_one_six.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                button_one_sixActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -92,13 +178,15 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(button_two_one)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(spriteTwo, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(usernameOneText)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 524, Short.MAX_VALUE)
+                                .addComponent(OpponentSelectionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(74, 74, 74)
+                                .addComponent(playerNameLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(button_one_one)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -113,21 +201,24 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
                         .addComponent(button_one_six)
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(spriteOne, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(button_two_two)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_two_three)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_two_four)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_two_five)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(button_two_six)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 563, Short.MAX_VALUE)
-                        .addComponent(usernameTwoText)
-                        .addGap(122, 122, 122))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(playerSelectionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(button_two_two)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(button_two_three)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(button_two_four)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(button_two_five)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(button_two_six)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 387, Short.MAX_VALUE)
+                                .addComponent(opponentNameLabel)
+                                .addGap(122, 122, 122))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,11 +231,11 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
                     .addComponent(button_two_four)
                     .addComponent(button_two_five)
                     .addComponent(button_two_six)
-                    .addComponent(usernameTwoText))
-                .addGap(32, 32, 32)
-                .addComponent(spriteTwo, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 310, Short.MAX_VALUE)
-                .addComponent(spriteOne, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(opponentNameLabel))
+                .addGap(35, 35, 35)
+                .addComponent(OpponentSelectionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 199, Short.MAX_VALUE)
+                .addComponent(playerSelectionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(button_one_six)
@@ -153,7 +244,7 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
                     .addComponent(button_one_three)
                     .addComponent(button_one_two)
                     .addComponent(button_one_one)
-                    .addComponent(usernameOneText))
+                    .addComponent(playerNameLabel))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -162,7 +253,17 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
         // TODO add your handling code here:
     }//GEN-LAST:event_button_one_sixActionPerformed
 
+    private void button_one_oneActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_button_one_oneActionPerformed
+    {//GEN-HEADEREND:event_button_one_oneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button_one_oneActionPerformed
+
+    private void button_one_threeActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_button_one_threeActionPerformed
+    {//GEN-HEADEREND:event_button_one_threeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_button_one_threeActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel OpponentSelectionLabel;
     private javax.swing.JButton button_one_five;
     private javax.swing.JButton button_one_four;
     private javax.swing.JButton button_one_one;
@@ -175,15 +276,153 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
     private javax.swing.JButton button_two_six;
     private javax.swing.JButton button_two_three;
     private javax.swing.JButton button_two_two;
-    private javax.swing.JLabel spriteOne;
-    private javax.swing.JLabel spriteTwo;
-    private javax.swing.JLabel usernameOneText;
-    private javax.swing.JLabel usernameTwoText;
+    private javax.swing.JLabel opponentNameLabel;
+    private javax.swing.JLabel playerNameLabel;
+    private javax.swing.JLabel playerSelectionLabel;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void update(Observable o, Object arg)
     {
-        
+        BattleModel bModel = (BattleModel) o;
+        playerNameLabel.setText(bModel.playerName);
+        opponentNameLabel.setText(bModel.opponentName);
+        int idx = 0;
+        this.playerTeam = bModel.playerTeam;
+
+        if (((ServerCommand) arg) == ServerCommand.PLAYER_UPDATE)
+        {
+            for (idx = 0; idx < bModel.playerTeam.size(); idx++)
+            {
+                ImageIcon icon = new ImageIcon("res/" + bModel.playerTeam.get(idx).sprite);
+                if (!bModel.playerTeam.get(idx).isAlive)
+                {
+                    Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    icon = new ImageIcon(smallImage);
+                    playerTeamButtons[idx].setIcon(icon);
+                    playerTeamButtons[idx].setDisabledIcon(null);
+                    playerTeamButtons[idx].setEnabled(false);
+                } else
+                {
+                    Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    icon = new ImageIcon(smallImage);
+                    playerTeamButtons[idx].setIcon(icon);
+                    playerTeamButtons[idx].setDisabledIcon(icon);
+                }
+            }
+            for (; idx < playerTeamButtons.length; idx++)
+            {
+                playerTeamButtons[idx].setVisible(false);
+                playerTeamButtons[idx].setEnabled(false);
+            }
+        } else if (((ServerCommand) arg) == ServerCommand.OPPONENT_UPDATE)
+        {
+            for (idx = 0; idx < bModel.opponentTeam.size(); idx++)
+            {
+                ImageIcon icon = new ImageIcon("res/pokeball.png");
+                if (!bModel.opponentTeam.get(idx).isAlive)
+                {
+          
+                    Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    icon = new ImageIcon(smallImage);
+                    opponentTeamButtons[idx].setIcon(icon);
+                    opponentTeamButtons[idx].setDisabledIcon(null);
+                    opponentTeamButtons[idx].setEnabled(false);
+                } else
+                {
+                    Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    icon = new ImageIcon(smallImage);
+                    opponentTeamButtons[idx].setIcon(icon);
+                    opponentTeamButtons[idx].setDisabledIcon(icon);
+                }
+            }
+
+            for (; idx < opponentTeamButtons.length; idx++)
+            {
+                opponentTeamButtons[idx].setVisible(false);
+                opponentTeamButtons[idx].setEnabled(false);
+            }
+
+            if (bModel.opponentSelection != null)
+            {
+                OpponentSelectionLabel.setIcon(new ImageIcon("res/" + bModel.opponentSelection.sprite));
+            }
+        } else if (((ServerCommand) arg) == ServerCommand.BATTLE_RESULT)
+        {
+            String chosenPlayer = bModel.playerSelection.name;
+            String chosenOpp = bModel.opponentSelection.name;
+            if (bModel.playerName.equals(bModel.roundWinner))
+            {
+                JOptionPane.showMessageDialog(this, "You win!\n"
+                        + chosenPlayer + " defeated " + chosenOpp);
+            } else
+            {
+                JOptionPane.showMessageDialog(this, bModel.opponentName
+                        + " won!\n" + chosenOpp
+                        + " defeated " + chosenPlayer);
+            }
+        } else if (((ServerCommand) arg) == ServerCommand.GET_BATTLE_SELECT)
+        {
+            resetScreen(bModel);
+        }
+    }
+
+    private void resetScreen(BattleModel bModel)
+    {
+        OpponentSelectionLabel.setIcon(new ImageIcon());
+        playerSelectionLabel.setIcon(new ImageIcon());
+        int idx = 0;
+         for (idx = 0; idx < bModel.playerTeam.size(); idx++)
+            {
+                ImageIcon icon = new ImageIcon("res/" + bModel.playerTeam.get(idx).sprite);
+                if (!bModel.playerTeam.get(idx).isAlive)
+                {
+                    Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    icon = new ImageIcon(smallImage);
+                    playerTeamButtons[idx].setIcon(icon);
+                    playerTeamButtons[idx].setDisabledIcon(null);
+                    playerTeamButtons[idx].setEnabled(false);
+                } else
+                {
+                    
+                    Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                    icon = new ImageIcon(smallImage);
+                    playerTeamButtons[idx].setIcon(icon);
+                    playerTeamButtons[idx].setEnabled(true);
+                    playerTeamButtons[idx].setDisabledIcon(icon);
+                }
+            }
+
+    
+    }
+    private Image grayscale(ImageIcon icon)
+    {
+        BufferedImage image = new BufferedImage(
+                icon.getIconWidth(),
+                icon.getIconHeight(),
+                BufferedImage.TYPE_INT_RGB);
+        Graphics g = image.createGraphics();
+
+        icon.paintIcon(null, g, 0, 0);
+        g.dispose();
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                Color c = new Color(image.getRGB(j, i));
+                int red = (int) (c.getRed() * 0.299);
+                int green = (int) (c.getGreen() * 0.587);
+                int blue = (int) (c.getBlue() * 0.114);
+                Color newColor = new Color(red + green + blue,
+                        red + green + blue, red + green + blue);
+
+                image.setRGB(j, i, newColor.getRGB());
+            }
+        }
+        return image;
     }
 }

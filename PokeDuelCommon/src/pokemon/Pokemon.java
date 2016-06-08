@@ -33,4 +33,17 @@ public class Pokemon implements Serializable {
         this.isAlive = isAlive;
     }
     
+    public Pokemon(Pokemon p)
+    {
+        this.id = p.id;
+        this.name = p.name;
+        this.cost = p.cost;
+        this.stats = p.stats;
+        this.sprite = p.sprite;
+        this.resistances = p.resistances;
+        this.types = p.types;
+        this.numTypes = p.numTypes;
+        this.isAlive = p.isAlive;
+    }
+    
 }

@@ -46,7 +46,7 @@ public class GameClient extends ObservableClient
         displayFrame.setContentPane(new LoginPanel(this));
         displayFrame.pack();
         
-        displayFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        displayFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         displayFrame.addWindowListener(new java.awt.event.WindowAdapter()
         {
             @Override
@@ -76,48 +76,62 @@ public class GameClient extends ObservableClient
     @Override
     public void handleMessageFromServer(Object message)
     {
-        NetworkWrapper net = (NetworkWrapper) message;
-        System.out.println(net.getCommand().toString());
-        switch ((ServerCommand) net.getCommand())
+        try
         {
-            case POKEMON_DATA:
-                doLoadPokemon((ArrayList<Pokemon>) net.getObject());
-                break;
-            case SUCCESS_LOGIN:
-                doLoadMenuPanel((Profile) net.getObject());
-            case OPPONENT_FOUND:
-                break;
-            case START_TEAM_SELECT:
-                doLoadTeamSelectionPanel();
-                break;
-            case GET_TEAM:
-                break;
-            case START_BATTLE:
-                doLoadGameScreenPanel();
-                bModel.setPlayerProfile((Profile)net.getObject());
-                break;
-            case GET_BATTLE_SELECT:
-                break;
-            case GAME_OVER:
-                break;
-            case PLAYER_LEFT:
-                break;
-            case ERROR_LOGIN:
-                break;
-            case BATTLE_RESULT:
-                break;
-            case PLAYER_UPDATE:
-                bModel.setPlayerProfile((Profile) net.getObject());
-                break;
-            case OPPONENT_UPDATE:
-                bModel.setOpponentProfile((Profile) net.getObject());
-                break;
+            NetworkWrapper net = (NetworkWrapper) message;
+            System.out.println(net.getCommand().toString());
+            switch ((ServerCommand) net.getCommand())
+            {
+                case POKEMON_DATA:
+                    doLoadPokemon((ArrayList<Pokemon>) net.getObject());
+                    break;
+                case SUCCESS_LOGIN:
+                    doLoadMenuPanel((Profile) net.getObject());
+                case OPPONENT_FOUND:
+                    break;
+                case START_TEAM_SELECT:
+                    doLoadTeamSelectionPanel();
+                    break;
+                case GET_TEAM:
+                    break;
+                case START_BATTLE:
+                    doLoadGameScreenPanel();
+                    //bModel.setPlayerProfile((Profile)net.getObject());
+                    break;
+                case GET_BATTLE_SELECT:
+                    bModel.doNewRound();
+                    break;
+                case GAME_OVER:
+                    JOptionPane.showMessageDialog(displayFrame.getContentPane(), (String)net.getObject());
+                    this.sendToServer(new NetworkWrapper(ClientCommand.LEAVE_GAME, null));
+                    break;
+                case PLAYER_LEFT:
+                    break;
+                case ERROR_LOGIN:
+                    break;
+                case BATTLE_RESULT:
+                    bModel.setRoundWinner((Profile) net.getObject());
+                    break;
+                case PLAYER_UPDATE:
+                    bModel.setPlayerProfile((Profile) net.getObject());
+                    break;
+                case OPPONENT_UPDATE:
+                    bModel.setOpponentProfile((Profile) net.getObject());
+                    break;
+            }
+        } catch (IOException ex)
+        {
+            Logger.getLogger(GameClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public void doLoadGameScreenPanel()
     {
-        displayFrame.setContentPane(new GameScreenPanel());
+        GameScreenPanel gsPanel = new GameScreenPanel(this);
+        bModel.deleteObservers();
+        bModel.addObserver(gsPanel);
+        displayFrame.setContentPane(gsPanel);
+        displayFrame.pack();
     }
 
     public void doLoadMenuPanel(Profile playerProfile)
@@ -155,6 +169,7 @@ public class GameClient extends ObservableClient
         pokeTableModel = new PokemonTableModel(list, 5, 31);
         // finish up
         //store data  in model class
+        
     }
 
     public static void main(String[] args) throws IOException

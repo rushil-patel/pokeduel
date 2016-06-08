@@ -30,5 +30,7 @@ public enum GameStates {
     /**
      * waiting for one pokemon battle selection
      */
-    WAITING_ONE_BATTLE
+    WAITING_ONE_BATTLE,
+    
+    GAME_OVER;
 }

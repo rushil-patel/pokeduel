@@ -5,6 +5,7 @@ import commands.ServerCommand;
 import connectors.DBConnection;
 import gameelements.Game;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,6 +71,15 @@ public class ComputerPlayer extends Player
             case START_BATTLE:
                 break;
             case GET_BATTLE_SELECT:
+                Random rand = new Random();
+                List<Pokemon> team = getTeam();
+                int idx = rand.nextInt(team.size());
+                Pokemon chosen = team.get(idx);
+                while(!chosen.isAlive)
+                {
+                    chosen = team.get(rand.nextInt(team.size()));
+                }
+                game.setPlayerPokemon(chosen, this.getId());
                 break;
             case GAME_OVER:
                 break;

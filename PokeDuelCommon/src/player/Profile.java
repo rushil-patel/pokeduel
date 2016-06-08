@@ -2,6 +2,7 @@
 package player;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import pokemon.Pokemon;
 
@@ -21,7 +22,11 @@ public class Profile implements Serializable
     {
         this.id = player.getId();
         this.name = player.getName();
-        this.team = player.getTeam();
+        team = new ArrayList();
+        for(Pokemon pokemon: player.getTeam())
+        {
+            team.add(new Pokemon(pokemon));
+        }
         this.currentPokemon = player.currentPokemon;
     }
 }
