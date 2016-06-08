@@ -90,14 +90,16 @@
               <EmptySpace pref="199" max="32767" attributes="0"/>
               <Component id="playerSelectionLabel" min="-2" pref="167" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="button_one_six" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="button_one_five" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="button_one_four" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="button_one_three" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="button_one_two" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="button_one_one" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="playerNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="button_one_six" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="button_one_five" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="button_one_four" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="button_one_three" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="button_one_two" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="button_one_one" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -106,14 +108,8 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JLabel" name="playerSelectionLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Sprite1"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="OpponentSelectionLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Sprite2"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="playerNameLabel">
       <Properties>

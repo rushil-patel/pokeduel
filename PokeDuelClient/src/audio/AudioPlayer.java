@@ -1,6 +1,8 @@
 package audio;
 
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.*;
 
 /**
@@ -10,7 +12,7 @@ import javax.sound.sampled.*;
 public class AudioPlayer
 {
 
-    public static void play(String path)
+    public static void play(String path, Float volumeDiff)
     {
         try
         {
@@ -25,10 +27,23 @@ public class AudioPlayer
             info = new DataLine.Info(Clip.class, format);
             clip = (Clip) AudioSystem.getLine(info);
             clip.open(stream);
+            
+            FloatControl gainControl =
+                    (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(volumeDiff);
+            
             clip.start();
-        } catch (Exception e)
+        } catch (UnsupportedAudioFileException ex)
         {
-            //whatevers
+            Logger.getLogger(AudioPlayer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(AudioPlayer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (LineUnavailableException ex)
+        {
+            Logger.getLogger(AudioPlayer.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+
     }
 }

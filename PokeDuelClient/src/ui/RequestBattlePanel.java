@@ -144,7 +144,7 @@ public class RequestBattlePanel extends javax.swing.JPanel {
         try
         {
 
-            AudioPlayer.play("res/select_sfx.wav");
+            AudioPlayer.play("res/select_sfx.wav", 0.0f);
 
             ((JButton)evt.getSource()).setEnabled(false);
             client.sendToServer(new NetworkWrapper(
@@ -159,7 +159,7 @@ public class RequestBattlePanel extends javax.swing.JPanel {
     {//GEN-HEADEREND:event_computerBattleButtonActionPerformed
          try
         {
-            AudioPlayer.play("res/select_sfx.wav");
+            AudioPlayer.play("res/select_sfx.wav", 0.0f);
 
             ((JButton)evt.getSource()).setEnabled(false);
             client.sendToServer(new NetworkWrapper(

@@ -7,9 +7,11 @@ import commands.ServerCommand;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.color.ColorSpace;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,8 +20,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import model.BattleModel;
 import pokemon.Pokemon;
@@ -69,7 +73,7 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    AudioPlayer.play("res/select_sfx.wav");
+                    AudioPlayer.play("res/select_sfx.wav", 0.0f);
 
                     JButton buttonClicked = (JButton) e.getSource();
                     List<JButton> playerButtonList = Arrays.asList(playerTeamButtons);
@@ -141,10 +145,6 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
         button_two_four = new javax.swing.JButton();
         button_two_five = new javax.swing.JButton();
         button_two_six = new javax.swing.JButton();
-
-        playerSelectionLabel.setText("Sprite1");
-
-        OpponentSelectionLabel.setText("Sprite2");
 
         playerNameLabel.setText("username1");
 
@@ -240,14 +240,15 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 199, Short.MAX_VALUE)
                 .addComponent(playerSelectionLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(button_one_six)
-                    .addComponent(button_one_five)
-                    .addComponent(button_one_four)
-                    .addComponent(button_one_three)
-                    .addComponent(button_one_two)
-                    .addComponent(button_one_one)
-                    .addComponent(playerNameLabel))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(playerNameLabel)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(button_one_six)
+                        .addComponent(button_one_five)
+                        .addComponent(button_one_four)
+                        .addComponent(button_one_three)
+                        .addComponent(button_one_two)
+                        .addComponent(button_one_one)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -358,18 +359,67 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
             {
                 JOptionPane.showMessageDialog(this, "You win!\n"
                         + chosenPlayer + " defeated " + chosenOpp);
+                doHitAnimation(OpponentSelectionLabel);
             } else
             {
                 JOptionPane.showMessageDialog(this, bModel.opponentName
                         + " won!\n" + chosenOpp
                         + " defeated " + chosenPlayer);
+                doHitAnimation(playerSelectionLabel);
             }
+            
         } else if (((ServerCommand) arg) == ServerCommand.GET_BATTLE_SELECT)
         {
             resetScreen(bModel);
         }
     }
+    
+    private void doHitAnimation(final JLabel pokeLabel)
+    {
+        new Thread(new Runnable() {
 
+            @Override
+            public void run()
+            {
+                try
+                {
+                    ImageIcon origIcon = (ImageIcon) pokeLabel.getIcon();
+                    AudioPlayer.play("res/critical_hit_sfx.wav", 0.0f);
+                    pokeLabel.setIcon(null);
+                    Thread.sleep(70);
+                    pokeLabel.setIcon(origIcon);
+                    Thread.sleep(70);
+                    
+                    pokeLabel.setIcon(null);
+                    Thread.sleep(70);
+                    pokeLabel.setIcon(origIcon);
+                    Thread.sleep(70);
+                    
+                    pokeLabel.setIcon(null);
+                    Thread.sleep(70);
+                    pokeLabel.setIcon(origIcon);
+                    Thread.sleep(70);
+                    
+                    pokeLabel.setIcon(null);
+                    Thread.sleep(70);
+                    pokeLabel.setIcon(origIcon);
+                    Thread.sleep(70);
+                } catch (InterruptedException ex)
+                {
+                    Logger.getLogger(GameScreenPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                
+            }
+        }).start();
+        try
+        {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex)
+        {
+            Logger.getLogger(GameScreenPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     private void resetScreen(BattleModel bModel)
     {
         OpponentSelectionLabel.setIcon(new ImageIcon());
@@ -400,32 +450,15 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
     }
     private Image grayscale(ImageIcon icon)
     {
-        BufferedImage image = new BufferedImage(
+        BufferedImage master = new BufferedImage(
                 icon.getIconWidth(),
                 icon.getIconHeight(),
-                BufferedImage.TYPE_INT_RGB);
-        Graphics g = image.createGraphics();
-
-        icon.paintIcon(null, g, 0, 0);
-        g.dispose();
-
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                Color c = new Color(image.getRGB(j, i));
-                int red = (int) (c.getRed() * 0.299);
-                int green = (int) (c.getGreen() * 0.587);
-                int blue = (int) (c.getBlue() * 0.114);
-                Color newColor = new Color(red + green + blue,
-                        red + green + blue, red + green + blue);
-
-                image.setRGB(j, i, newColor.getRGB());
-            }
-        }
-        return image;
+                BufferedImage.TYPE_INT_ARGB);
+        BufferedImage gray = new BufferedImage(master.getWidth(), master.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        // Automatic converstion....
+        ColorConvertOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+        op.filter(master, gray);
+        
+        return gray;
     }
 }

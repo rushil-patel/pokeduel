@@ -74,7 +74,7 @@ public class TeamSelectionPanel extends javax.swing.JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                AudioPlayer.play("res/select_sfx.wav");
+                AudioPlayer.play("res/select_sfx.wav", 0.0f);
 
                 try
                 {
@@ -116,7 +116,7 @@ public class TeamSelectionPanel extends javax.swing.JPanel
             @Override
             public void mousePressed(MouseEvent evt)
             {
-                AudioPlayer.play("res/select_sfx.wav");
+                AudioPlayer.play("res/select_sfx.wav", 0.0f);
 
                 Point clickPoint = evt.getPoint();
                 JTable table = (JTable) evt.getSource();
