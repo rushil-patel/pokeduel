@@ -31,17 +31,7 @@ public class LoginPanel extends javax.swing.JPanel {
     public LoginPanel(GameClient client) {
         this.client = client;
         initComponents();
-        try
-        {
-            Font font = java.awt.Font.createFont(Font.TRUETYPE_FONT, new java.io.File("res/Pokemon Solid.ttf"));
-            font = font.deriveFont(30);
-        } catch (FontFormatException ex)
-        {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex)
-        {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }
 
     /**

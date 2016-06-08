@@ -1,5 +1,6 @@
 package client;
 
+import audio.AudioPlayer;
 import ui.Display;
 import com.lloseng.ocsf.client.ObservableClient;
 import commands.ClientCommand;
@@ -177,6 +178,7 @@ public class GameClient extends ObservableClient
         String hostaddr = "localhost";
         int port = 6666;
         GameClient client = new GameClient(hostaddr, port);
+        AudioPlayer.play("res/bgmusic.wav");
         try
         {
             client.openConnection();
