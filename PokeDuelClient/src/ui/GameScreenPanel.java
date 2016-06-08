@@ -1,5 +1,8 @@
 package ui;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -9,8 +12,9 @@ package ui;
  *
  * @author seongbo
  */
-public class GameScreenPanel extends javax.swing.JPanel {
-
+public class GameScreenPanel extends javax.swing.JPanel implements Observer
+{
+   
     /**
      * Creates new form gameScreen
      */
@@ -176,4 +180,10 @@ public class GameScreenPanel extends javax.swing.JPanel {
     private javax.swing.JLabel usernameOneText;
     private javax.swing.JLabel usernameTwoText;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg)
+    {
+        
+    }
 }

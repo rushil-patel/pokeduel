@@ -17,7 +17,7 @@ public class DBConnection {
         Class.forName("org.mariadb.jdbc.Driver");
 
         String dbUser = "root";
-        String dbPass = "seongbo";
+        String dbPass = "admin";
         String host = "localhost";
         String dbName = "pokedb";
 

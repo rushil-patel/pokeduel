@@ -1,5 +1,14 @@
 package ui;
 
+import client.GameClient;
+import commands.ClientCommand;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import player.Player;
+import player.Profile;
+import wrappers.NetworkWrapper;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -11,11 +20,15 @@ package ui;
  */
 public class RequestBattlePanel extends javax.swing.JPanel {
 
+    GameClient client;
     /**
      * Creates new form newJPanel
      */
-    public RequestBattlePanel() {
+    public RequestBattlePanel(GameClient client, Profile player) {
+        this.client = client;
         initComponents();
+        
+        this.usernameLabel.setText(player.name);
     }
 
     /**
@@ -25,59 +38,85 @@ public class RequestBattlePanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
-        battleComputerButton = new javax.swing.JToggleButton();
-        battleHumanButton = new javax.swing.JToggleButton();
-        usernameText = new javax.swing.JLabel();
+        usernameLabel = new javax.swing.JLabel();
         winText = new javax.swing.JLabel();
         lossText = new javax.swing.JLabel();
         winCount = new javax.swing.JLabel();
         lossCount = new javax.swing.JLabel();
+        usersnameText = new javax.swing.JLabel();
+        humanBattleButton = new javax.swing.JButton();
+        computerBattleButton = new javax.swing.JButton();
 
-        battleComputerButton.setText("Battle Computer");
+        setMaximumSize(new java.awt.Dimension(800, 600));
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setName(""); // NOI18N
 
-        battleHumanButton.setText("Battle Human");
+        usernameLabel.setText("Username:  ");
 
-        usernameText.setText("Username");
+        winText.setText("Win:  ");
 
-        winText.setText("Win:");
-
-        lossText.setText("Loss:");
+        lossText.setText("Loss: ");
 
         winCount.setText("0");
 
         lossCount.setText("0");
+
+        usersnameText.setText(" ");
+
+        humanBattleButton.setText("Battle Human");
+        humanBattleButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                humanBattleButtonActionPerformed(evt);
+            }
+        });
+
+        computerBattleButton.setText("Battle Computer");
+        computerBattleButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                computerBattleButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(220, 220, 220)
-                .addComponent(battleHumanButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 307, Short.MAX_VALUE)
-                .addComponent(battleComputerButton)
-                .addGap(206, 206, 206))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(434, 434, 434)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addContainerGap(163, Short.MAX_VALUE)
+                .addComponent(humanBattleButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(winText)
-                        .addGap(18, 18, 18)
-                        .addComponent(winCount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(usernameText)
+                        .addGap(54, 54, 54)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(winText)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lossText)
+                                    .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(13, 13, 13)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(usersnameText, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(winCount, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lossCount, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lossText)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lossCount, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(207, 207, 207)
+                        .addComponent(computerBattleButton)))
+                .addGap(222, 222, 222))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(152, 152, 152)
-                .addComponent(usernameText, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(230, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(usersnameText))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(winText)
@@ -86,19 +125,48 @@ public class RequestBattlePanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lossText)
                     .addComponent(lossCount))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 208, Short.MAX_VALUE)
+                .addGap(99, 99, 99)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(battleComputerButton)
-                    .addComponent(battleHumanButton))
+                    .addComponent(humanBattleButton)
+                    .addComponent(computerBattleButton))
                 .addGap(182, 182, 182))
         );
+
+        usernameLabel.getAccessibleContext().setAccessibleName("usernameLabel");
+        usersnameText.getAccessibleContext().setAccessibleName("usernameValue");
     }// </editor-fold>//GEN-END:initComponents
+
+    private void humanBattleButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_humanBattleButtonActionPerformed
+    {//GEN-HEADEREND:event_humanBattleButtonActionPerformed
+        try
+        {
+            client.sendToServer(new NetworkWrapper(
+                    ClientCommand.FIND_GAME_HUMAN, null));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(RequestBattlePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_humanBattleButtonActionPerformed
+
+    private void computerBattleButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_computerBattleButtonActionPerformed
+    {//GEN-HEADEREND:event_computerBattleButtonActionPerformed
+         try
+        {
+            client.sendToServer(new NetworkWrapper(
+                    ClientCommand.FIND_GAME_COMPUTER, null));
+        } catch (IOException ex)
+        {
+            Logger.getLogger(RequestBattlePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_computerBattleButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton battleComputerButton;
-    private javax.swing.JToggleButton battleHumanButton;
+    private javax.swing.JButton computerBattleButton;
+    private javax.swing.JButton humanBattleButton;
     private javax.swing.JLabel lossCount;
     private javax.swing.JLabel lossText;
-    private javax.swing.JLabel usernameText;
+    private javax.swing.JLabel usernameLabel;
+    private javax.swing.JLabel usersnameText;
     private javax.swing.JLabel winCount;
     private javax.swing.JLabel winText;
     // End of variables declaration//GEN-END:variables

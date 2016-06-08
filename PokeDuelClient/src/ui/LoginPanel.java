@@ -1,5 +1,13 @@
 package ui;
 
+import client.GameClient;
+import commands.ClientCommand;
+import java.awt.BorderLayout;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import wrappers.NetworkWrapper;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -11,10 +19,12 @@ package ui;
  */
 public class LoginPanel extends javax.swing.JPanel {
 
+    private GameClient client;
     /**
      * Creates new form Login
      */
-    public LoginPanel() {
+    public LoginPanel(GameClient client) {
+        this.client = client;
         initComponents();
     }
 
@@ -25,7 +35,8 @@ public class LoginPanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         welcomeText = new javax.swing.JLabel();
         loginTextField = new javax.swing.JTextField();
@@ -34,15 +45,21 @@ public class LoginPanel extends javax.swing.JPanel {
         welcomeText.setFont(new java.awt.Font("Ubuntu", 0, 36)); // NOI18N
         welcomeText.setText("Welcome to Pokeduel!");
 
-        loginTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        loginTextField.setText("Enter username");
+        loginTextField.setMaximumSize(new java.awt.Dimension(6, 20));
+        loginTextField.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 loginTextFieldActionPerformed(evt);
             }
         });
 
         loginButton.setText("Login");
-        loginButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        loginButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 loginButtonActionPerformed(evt);
             }
         });
@@ -52,28 +69,27 @@ public class LoginPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(470, 470, 470)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(loginTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
+                        .addGap(216, 216, 216)
+                        .addComponent(welcomeText))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(302, 302, 302)
+                        .addComponent(loginTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(loginButton)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(339, Short.MAX_VALUE)
-                .addComponent(welcomeText)
-                .addGap(329, 329, 329))
+                .addContainerGap(222, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(150, 150, 150)
+                .addContainerGap(220, Short.MAX_VALUE)
                 .addComponent(welcomeText)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216, Short.MAX_VALUE)
-                .addComponent(loginTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(loginButton)
-                .addGap(159, 159, 159))
+                .addGap(95, 95, 95)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(loginTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(loginButton))
+                .addGap(212, 212, 212))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -82,7 +98,24 @@ public class LoginPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_loginTextFieldActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        // TODO add your handling code here:
+        String username = this.loginTextField.getText();
+        if ((username.length() == 0) 
+                || username.replaceAll("[a-zA-Z]","").length() != 0)
+        {
+            //display user name restrictions
+        }
+        else
+        {
+            NetworkWrapper net = new NetworkWrapper(ClientCommand.LOGIN,
+                    username);
+            try
+            {
+                client.sendToServer(net);
+            } catch (IOException ex)
+            {
+                Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_loginButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

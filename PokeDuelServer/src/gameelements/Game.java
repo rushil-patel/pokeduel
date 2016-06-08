@@ -1,18 +1,20 @@
 package gameelements;
 
+import commands.ServerCommand;
 import pokemon.Pokemon;
 import pokemon.Stats;
 import player.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import wrappers.NetworkWrapper;
 
 public class Game {
     private List<Player> players;
     public GameStates state;
     
     public Game(List<Player> players) {
-        players = new ArrayList();
+        this.players = players;
         state = GameStates.WAITING_JOIN_PLAYER_1;
     }
     
@@ -21,6 +23,87 @@ public class Game {
         return this.players;
     }
     
+    public void setPlayerPokemon(Pokemon pokemon, int pId)
+    {
+        if(players.get(0).getId() == pId)
+        {
+            players.get(0).currentPokemon = pokemon;
+        }
+        else
+        {
+            players.get(1).currentPokemon = pokemon;
+        }
+        
+        if (state == GameStates.WAITING_TWO_BATTLE)
+                {
+                    state = GameStates.WAITING_ONE_BATTLE;
+                } 
+                else if (state == GameStates.WAITING_ONE_BATTLE)
+                {
+                    players.get(0).send(
+                            new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
+                            players.get(1).getProfile()));
+                    players.get(1).send(
+                            new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
+                            players.get(0).getProfile()));
+                    
+                    Player winner = doBattle();
+
+                    players.get(0).send(
+                            new NetworkWrapper(ServerCommand.BATTLE_RESULT,
+                            winner));
+                    players.get(1).send(
+                            new NetworkWrapper(ServerCommand.BATTLE_RESULT,
+                            winner));
+                    
+                    players.get(0).send(
+                            new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
+                            players.get(0).getProfile()));
+                    players.get(1).send(
+                            new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
+                            players.get(1).getProfile()));
+                    
+                    state = GameStates.WAITING_TWO_BATTLE;
+                    
+                    players.get(0).requestSelection();
+                    players.get(1).requestSelection();
+                }
+        
+    }
+    public void setPlayerTeam(ArrayList<Pokemon> team, int pId)
+    {
+        if(players.get(0).getId() == pId)
+        {
+            players.get(0).setTeam(team);
+        }
+        else
+        {
+            players.get(1).setTeam(team);
+        }
+        
+        if (state == GameStates.WAITING_ONE_TEAM)
+        {
+            state = GameStates.WAITING_TWO_BATTLE;
+            NetworkWrapper net = new NetworkWrapper(ServerCommand.START_BATTLE, null);
+            NetworkWrapper update1 = new NetworkWrapper(ServerCommand.PLAYER_UPDATE, players.get(0).getProfile());
+            NetworkWrapper update2 = new NetworkWrapper(ServerCommand.PLAYER_UPDATE, players.get(1).getProfile());
+            NetworkWrapper update3 = new NetworkWrapper(ServerCommand.PLAYER_UPDATE, players.get(1).getProfile());
+            NetworkWrapper update4 = new NetworkWrapper(ServerCommand.PLAYER_UPDATE, players.get(0).getProfile());
+            players.get(0).send(net);
+            players.get(1).send(net);
+            
+            players.get(0).send(update1);
+            players.get(1).send(update2);
+            players.get(0).send(update3);
+            players.get(1).send(update4);
+            players.get(0).requestSelection();
+            players.get(1).requestSelection();
+        } else if (state == GameStates.WAITING_TWO_TEAMS)
+        {
+            state = GameStates.WAITING_ONE_TEAM;
+        }
+
+    }
     public Player doBattle()
     {
         Player p1 = players.get(0);

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import player.ComputerPlayer;
 import player.Player;
 import pokemon.Pokemon;
 import wrappers.NetworkWrapper;
@@ -22,8 +23,19 @@ public class GameManager
         //create a new empty game
         games.add(new Game(new ArrayList()));
     }
-
-    public void addPlayerToGame(Player player) throws IOException
+    
+    public void addPlayerToComputerGame(Player player)
+    {
+        Game game = new Game(new ArrayList());
+        ComputerPlayer com = new ComputerPlayer(-1, "Computer", game);
+        game.addPlayer(player);
+        game.addPlayer(com);
+        game.state = GameStates.WAITING_TWO_TEAMS;
+        player.requestTeam();
+        com.requestTeam();
+        games.add(game);       
+    }
+    public void addPlayerToHumanGame(Player player) throws IOException
     {
         Game game;
         boolean addSuccess = false;
@@ -45,14 +57,12 @@ public class GameManager
                         ServerCommand.OPPONENT_FOUND, p1);
                 NetworkWrapper oppNotif1 = new NetworkWrapper(
                         ServerCommand.OPPONENT_FOUND, p2);
-                //SEND team select command to both players
-                game.getPlayers().get(1).client.sendToClient(oppNotif0);
-                game.getPlayers().get(2).client.sendToClient(oppNotif1);
+                
+                p1.send(oppNotif0);
+                p2.send(oppNotif1);
 
-                NetworkWrapper teamCommand = new NetworkWrapper(null,
-                        ServerCommand.START_TEAM_SELECT);
-                p1.client.sendToClient(teamCommand);
-                p2.client.sendToClient(teamCommand);
+                p1.requestTeam();
+                p2.requestTeam();
             }
         }
 
@@ -89,38 +99,41 @@ public class GameManager
             if (player.getId() == players.get(idx).getId())
             {
                 players.get(idx).currentPokemon = pmon;
-
-                if (game.state == GameStates.WAITING_TWO_BATTLE)
-                {
-                    game.state = GameStates.WAITING_ONE_BATTLE;
-                } 
-                else if (game.state == GameStates.WAITING_ONE_BATTLE)
-                {
-                    players.get(0).client.sendToClient(
-                            new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
-                            players.get(1)));
-                    players.get(1).client.sendToClient(
-                            new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
-                            players.get(0)));
-                    
-                    Player winner = game.doBattle();
-
-                    players.get(0).client.sendToClient(
-                            new NetworkWrapper(ServerCommand.BATTLE_RESULT,
-                            winner));
-                    players.get(1).client.sendToClient(
-                            new NetworkWrapper(ServerCommand.BATTLE_RESULT,
-                            winner));
-                    
-                    players.get(0).client.sendToClient(
-                            new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
-                            players.get(0)));
-                    players.get(1).client.sendToClient(
-                            new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
-                            players.get(1)));
-                    
-                    game.state = GameStates.WAITING_TWO_BATTLE;
-                }
+                game.setPlayerPokemon(pmon, player.getId());
+//                if (game.state == GameStates.WAITING_TWO_BATTLE)
+//                {
+//                    game.state = GameStates.WAITING_ONE_BATTLE;
+//                } 
+//                else if (game.state == GameStates.WAITING_ONE_BATTLE)
+//                {
+//                    players.get(0).send(
+//                            new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
+//                            players.get(1)));
+//                    players.get(1).send(
+//                            new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
+//                            players.get(0)));
+//                    
+//                    Player winner = game.doBattle();
+//
+//                    players.get(0).send(
+//                            new NetworkWrapper(ServerCommand.BATTLE_RESULT,
+//                            winner));
+//                    players.get(1).send(
+//                            new NetworkWrapper(ServerCommand.BATTLE_RESULT,
+//                            winner));
+//                    
+//                    players.get(0).send(
+//                            new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
+//                            players.get(0)));
+//                    players.get(1).send(
+//                            new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
+//                            players.get(1)));
+//                    
+//                    game.state = GameStates.WAITING_TWO_BATTLE;
+//                    
+//                    players.get(0).requestSelection();
+//                    players.get(1).requestSelection();
+//                }
                 return;
             }
         }
@@ -134,14 +147,16 @@ public class GameManager
         {
             if (player.getId() == players.get(idx).getId())
             {
-                players.get(idx).setTeam(team);
-                if (game.state == GameStates.WAITING_ONE_TEAM)
-                {
-                    game.state = GameStates.WAITING_TWO_BATTLE;
-                } else if (game.state == GameStates.WAITING_TWO_TEAMS)
-                {
-                    game.state = GameStates.WAITING_ONE_TEAM;
-                }
+                
+                game.setPlayerTeam(team, player.getId());
+                //players.get(idx).setTeam(team);
+//                if (game.state == GameStates.WAITING_ONE_TEAM)
+//                {
+//                    game.state = GameStates.WAITING_TWO_BATTLE;
+//                } else if (game.state == GameStates.WAITING_TWO_TEAMS)
+//                {
+//                    game.state = GameStates.WAITING_ONE_TEAM;
+//                }
                 return;
             }
         }
@@ -151,12 +166,11 @@ public class GameManager
     {
         for (Game game : games)
         {
-            int pid1 = game.getPlayers().get(0).getId();
-            int pid2 = game.getPlayers().get(1).getId();
-            if (pid1 == player.getId() || pid2 == player.getId())
-            {
-                return game;
-            }
+            for(Player p: game.getPlayers())
+                if(p.getId() == player.getId())
+                {
+                    return game;
+                }
         }
         return null;
     }

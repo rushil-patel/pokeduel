@@ -14,7 +14,7 @@ public enum ClientCommand implements Command {
     /**
      * Looking for game to join
      */
-    FIND_GAME,
+    FIND_GAME_HUMAN,
     /**
      * Login with username
      */
@@ -23,5 +23,6 @@ public enum ClientCommand implements Command {
      * Left Game
      */
     LEAVE_GAME,
+    FIND_GAME_COMPUTER,
     LOAD_POKEMON;
 }

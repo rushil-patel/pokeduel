@@ -1,5 +1,8 @@
 package ui;
 
+import java.awt.Dimension;
+import javax.swing.JOptionPane;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -18,6 +21,11 @@ public class Display extends javax.swing.JFrame
     public Display()
     {
         initComponents();
+        
+        setPreferredSize(new Dimension(800,600));
+        repaint();
+        pack();        
+     
     }
 
     /**

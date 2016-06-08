@@ -49,13 +49,16 @@ public class GameServer extends ObservableServer
                 doLoadPokemon(net, client);
                 break;
             case LOGIN:
-                //doLogin
+                doLogin(net, client);
                 break;
-            case FIND_GAME:
-                //doFindGame
+            case FIND_GAME_HUMAN:
+                doFindGameHuman(net, client);
+                break;
+            case FIND_GAME_COMPUTER:
+                doFindGameComputer(net, client);
                 break;
             case GIVE_TEAM:
-                //doTeamSelect
+                doTeamSelection(net, client);
                 break;
             case GIVE_BATTLE_SELECT:
                 //doBattleSelection
@@ -73,18 +76,26 @@ public class GameServer extends ObservableServer
             NetworkWrapper pokemonData = new NetworkWrapper(
                     ServerCommand.POKEMON_DATA, pokemonList);
             client.sendToClient(pokemonData);
+            System.out.println("sent data");
         } catch (Exception ex)
         {
             Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
-    private void doBattleSelection(NetworkWrapper net, ConnectionToClient client) throws IOException
+    private void doBattleSelection(NetworkWrapper net, ConnectionToClient client)
     {
-        Player player = connectionUsers.get(client);
-        Pokemon pmon = (Pokemon) net.getObject();
+        try
+        {
+            Player player = connectionUsers.get(client);
+            Pokemon pmon = (Pokemon) net.getObject();
 
-        gMan.setPlayerBattleSelection(player, pmon);
+            gMan.setPlayerBattleSelection(player, pmon);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void doTeamSelection(NetworkWrapper net, ConnectionToClient client)
@@ -95,7 +106,7 @@ public class GameServer extends ObservableServer
 
     }
 
-    private void doLogin(NetworkWrapper net, ConnectionToClient client) throws IOException
+    private void doLogin(NetworkWrapper net, ConnectionToClient client)
     {
         //IF player exists in map with same username
         //THEN return error to client
@@ -113,29 +124,69 @@ public class GameServer extends ObservableServer
         {
             if (player.getName().equals(username))
             {
-                NetworkWrapper failedLogin = new NetworkWrapper(
-                        ServerCommand.ERROR_LOGIN, "Username is taken");
-                client.sendToClient(failedLogin);
-                userLoggedIn = true;
-                break;
+                try
+                {
+                    NetworkWrapper failedLogin = new NetworkWrapper(
+                            ServerCommand.ERROR_LOGIN, "Profile is already logged in.");
+                    client.sendToClient(failedLogin);
+                    userLoggedIn = true;
+                    break;
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
 
         if (!userLoggedIn)
         {
-            //WAIT FOR SEONG 
-            //if user in db
-            //load from db ad add to map
-            //else 
-            //add new user to db and and map
-            //sent login success to client with player object
+            try
+            {
+                Player player;
+                if (DBConnection.checkUser(username))
+                {
+                    player = DBConnection.getUser(username);
+                    addPlayerAndConnection(player, client);
+                } else
+                {
+                    DBConnection.createUser(username);
+                    player = DBConnection.getUser(username);
+                    addPlayerAndConnection(player, client);
+                }
+                player.client = client;
+                NetworkWrapper logNet = new NetworkWrapper(
+                        ServerCommand.SUCCESS_LOGIN, player.getProfile());
+                client.sendToClient(logNet);
+                //if user in db
+                //load from db ad add to map
+                //else 
+                //add new user to db and and map
+                //sent login success to client with player object
+            } catch (Exception ex)
+            {
+                Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
-    private void doFindGame(NetworkWrapper net, ConnectionToClient client) throws IOException
+    private void doFindGameHuman(NetworkWrapper net, ConnectionToClient client)
     {
+        try
+        {
+            Player player = connectionUsers.get(client);
+            gMan.addPlayerToHumanGame(player);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void doFindGameComputer(NetworkWrapper net, ConnectionToClient client)
+    {
+
         Player player = connectionUsers.get(client);
-        gMan.addPlayerToGame(player);
+        gMan.addPlayerToComputerGame(player);
+
     }
 
     public void addPlayerAndConnection(Player player, ConnectionToClient client)

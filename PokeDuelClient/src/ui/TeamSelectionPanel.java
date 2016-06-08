@@ -1,77 +1,178 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ui;
+
+import client.GameClient;
+import commands.ClientCommand;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.Border;
+import model.PokemonTableModel;
+import pokemon.Pokemon;
+import wrappers.NetworkWrapper;
 
 /**
  *
- * @author seongbo
+ * @author rushi_000
  */
-public class TeamSelectionPanel extends javax.swing.JPanel {
+public class TeamSelectionPanel extends javax.swing.JPanel
+{
 
+    private PokeTable allPokemonTable;
+    private JScrollPane allScrollPane;
+    private JPanel titlePanel;
+    private JPanel bottomPanel;
+    private PokemonTableModel model;
+    public List<Pokemon> selectedPokemon;
+    private PokemonTableModel selectedModel;
+    private PokeTable selectedTable;
+    private JLabel teamCostLabel;
+    private JButton lockInButton;
+    private final GameClient client;
+    private boolean hasLockedIn = false;
+    
     /**
      * Creates new form TeamSelectionPanel
      */
-    public TeamSelectionPanel() {
-        initComponents();
+    public TeamSelectionPanel(final GameClient client,
+            PokemonTableModel model, PokemonRenderer renderer)
+    {
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.model = model;
+        this.client = client;
+        selectedPokemon = new ArrayList<Pokemon>();
+        selectedModel = new PokemonTableModel(selectedPokemon, 6, 1);
+        selectedTable = new PokeTable(renderer);
+        selectedTable.setRowHeight(100);
+        selectedTable.setShowGrid(false);
+        selectedTable.setShowHorizontalLines(false);
+        selectedTable.setShowVerticalLines(false);
+        
+        teamCostLabel = new JLabel("Cost: 0/200");
+        lockInButton = new JButton("Lock In");
+        
+        lockInButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                try
+                {
+                    if (selectedPokemon.size() > 0)
+                    {
+                        hasLockedIn = true;
+
+                        client.sendToServer(new NetworkWrapper(ClientCommand.GIVE_TEAM,
+                                selectedPokemon));
+                        ((JButton)e.getSource()).setEnabled(false);
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(((JButton)e.getSource()).getParent(),
+                                "...just why?? Select at least 1 Pokemon.");
+                    }
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(TeamSelectionPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        titlePanel = new JPanel();
+        titlePanel.add(new JLabel("Choose your Team"));
+        
+        this.add(titlePanel);
+
+        allPokemonTable = new PokeTable(renderer);
+        allPokemonTable.setModel(model);
+        allPokemonTable.setTableHeader(null);
+        allPokemonTable.setShowGrid(false);
+        allPokemonTable.setShowHorizontalLines(false);
+        allPokemonTable.setShowVerticalLines(false);
+        allPokemonTable.setPreferredScrollableViewportSize(new Dimension(800, 400));
+        allPokemonTable.setPreferredScrollableViewportSize(new Dimension(800, 400));
+        allPokemonTable.addMouseListener(new MouseAdapter()
+        
+        {
+            @Override
+            public void mousePressed(MouseEvent evt)
+            {
+                Point clickPoint = evt.getPoint();
+                JTable table = (JTable) evt.getSource();
+                int row = table.rowAtPoint(clickPoint);
+                int col = table.columnAtPoint(clickPoint);
+                if (!hasLockedIn)
+                {
+                    selectPokemonAt(row, col);
+                }
+
+            }
+        });
+
+        
+        allScrollPane = new JScrollPane(allPokemonTable);
+        this.add(allScrollPane);
+        Component padding = Box.createRigidArea(new Dimension(this.getWidth(), 50));
+        this.add(padding);
+        model.fireTableChanged(null);
+        
+        this.add(lockInButton);
+        this.add(teamCostLabel);
+
+        bottomPanel = new JPanel();
+        bottomPanel.add(selectedTable);
+        
+        bottomPanel.validate();
+        this.add(selectedTable);
+        validate();
+        model.fireTableChanged(null);
+
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void selectPokemonAt(int row, int col)
+    {
+        Pokemon selection = (Pokemon) model.getValueAt(row, col);
+        
+        int totalCost = 0;
+        for(Pokemon poke: selectedPokemon)
+        {
+            totalCost += poke.cost;
+        }
+        
+        
+        
+            if (selectedPokemon.contains(selection))
+            {
+                selectedPokemon.remove(selection);
+                totalCost -= selection.cost;
+            } else if(totalCost + selection.cost < 200)
+            {
+                selectedPokemon.add(selection);
+                totalCost += selection.cost;
+            }
+            
+            teamCostLabel.setText("Cost: "+totalCost+"/200");
 
-        teamSelectionPanel = new javax.swing.JScrollPane();
-        selectedTeamPanel = new javax.swing.JScrollPane();
-        lockInButton = new javax.swing.JButton();
-        pointsLeftText = new javax.swing.JLabel();
-        pointsLeftCount = new javax.swing.JLabel();
+        selectedModel = new PokemonTableModel(selectedPokemon, 6, 1);
+        selectedTable.setModel(selectedModel);
+        selectedModel.fireTableChanged(null);
 
-        lockInButton.setText("Lock In");
 
-        pointsLeftText.setText("Points Left:");
-
-        pointsLeftCount.setText("0");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(teamSelectionPanel)
-            .addComponent(selectedTeamPanel)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(lockInButton)
-                .addGap(54, 54, 54)
-                .addComponent(pointsLeftText)
-                .addGap(18, 18, 18)
-                .addComponent(pointsLeftCount)
-                .addContainerGap(892, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(teamSelectionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 554, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(selectedTeamPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lockInButton)
-                    .addComponent(pointsLeftText)
-                    .addComponent(pointsLeftCount))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
-    }// </editor-fold>//GEN-END:initComponents
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton lockInButton;
-    private javax.swing.JLabel pointsLeftCount;
-    private javax.swing.JLabel pointsLeftText;
-    private javax.swing.JScrollPane selectedTeamPanel;
-    private javax.swing.JScrollPane teamSelectionPanel;
-    // End of variables declaration//GEN-END:variables
+    }
 }

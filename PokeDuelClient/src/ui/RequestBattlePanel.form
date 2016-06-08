@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <Properties>
+    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[800, 600]"/>
+    </Property>
+    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+      <Dimension value="[800, 600]"/>
+    </Property>
+    <Property name="name" type="java.lang.String" value="" noResource="true"/>
+  </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -16,37 +25,45 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="220" max="-2" attributes="0"/>
-              <Component id="battleHumanButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="307" max="32767" attributes="0"/>
-              <Component id="battleComputerButton" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="206" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="434" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="winText" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="winCount" max="32767" attributes="0"/>
+          <Group type="102" attributes="0">
+              <EmptySpace pref="163" max="32767" attributes="0"/>
+              <Component id="humanBattleButton" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="winText" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lossText" min="-2" max="-2" attributes="0"/>
+                                  <Component id="usernameLabel" min="-2" pref="65" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="usersnameText" min="-2" pref="19" max="-2" attributes="0"/>
+                                  <Component id="winCount" min="-2" pref="19" max="-2" attributes="0"/>
+                                  <Component id="lossCount" min="-2" pref="19" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
                   </Group>
-                  <Component id="usernameText" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="lossText" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="lossCount" min="-2" pref="19" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="207" max="-2" attributes="0"/>
+                      <Component id="computerBattleButton" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="222" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="152" max="-2" attributes="0"/>
-              <Component id="usernameText" min="-2" pref="14" max="-2" attributes="0"/>
+              <EmptySpace pref="230" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="usernameLabel" alignment="3" min="-2" pref="14" max="-2" attributes="0"/>
+                  <Component id="usersnameText" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="winText" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -57,10 +74,10 @@
                   <Component id="lossText" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lossCount" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="208" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="battleComputerButton" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="battleHumanButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="humanBattleButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="computerBattleButton" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="182" max="-2" attributes="0"/>
           </Group>
@@ -68,29 +85,22 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JToggleButton" name="battleComputerButton">
+    <Component class="javax.swing.JLabel" name="usernameLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Battle Computer"/>
+        <Property name="text" type="java.lang.String" value="Username:  "/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JToggleButton" name="battleHumanButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Battle Human"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="usernameText">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Username"/>
-      </Properties>
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="usernameLabel"/>
+      </AccessibilityProperties>
     </Component>
     <Component class="javax.swing.JLabel" name="winText">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Win:"/>
+        <Property name="text" type="java.lang.String" value="Win:  "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lossText">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Loss:"/>
+        <Property name="text" type="java.lang.String" value="Loss: "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="winCount">
@@ -102,6 +112,30 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="0"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="usersnameText">
+      <Properties>
+        <Property name="text" type="java.lang.String" value=" "/>
+      </Properties>
+      <AccessibilityProperties>
+        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="usernameValue"/>
+      </AccessibilityProperties>
+    </Component>
+    <Component class="javax.swing.JButton" name="humanBattleButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Battle Human"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="humanBattleButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="computerBattleButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Battle Computer"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="computerBattleButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

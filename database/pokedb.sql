@@ -47,7 +47,7 @@ CREATE TABLE PokemonCost(
 );
 
 CREATE TABLE Users(
-   id INT,
+   id INT AUTO_INCREMENT,
    username VARCHAR(64),
    win INT,
    loss INT,

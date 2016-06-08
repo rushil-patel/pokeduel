@@ -55,8 +55,8 @@ import java.util.*;
 * @author Fran&ccedil;ois B&eacute;langer
 * @author Paul Holden
 * @version December 2003 (2.31)
-*/
-public class ConnectionToClient extends Thread
+*/ 
+public class ConnectionToClient extends Thread implements Serializable
 {
 // INSTANCE VARIABLES ***********************************************
 
