@@ -94,6 +94,9 @@ public class GameManager
             List<Player> list = new ArrayList();
             Game openGame = new Game(list);
             openGame.addPlayer(player);
+            openGame.state = GameStates.WAITING_JOIN_PLAYER_2;
+            games.add(openGame);
+
         }
     }
 

@@ -1,5 +1,6 @@
 package ui;
 
+import audio.AudioPlayer;
 import client.GameClient;
 import commands.ClientCommand;
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class RequestBattlePanel extends javax.swing.JPanel {
         initComponents();
         
         this.usernameLabel.setText(player.name);
+        
     }
 
     /**
@@ -141,6 +143,9 @@ public class RequestBattlePanel extends javax.swing.JPanel {
     {//GEN-HEADEREND:event_humanBattleButtonActionPerformed
         try
         {
+
+            AudioPlayer.play("res/select_sfx.wav");
+
             ((JButton)evt.getSource()).setEnabled(false);
             client.sendToServer(new NetworkWrapper(
                     ClientCommand.FIND_GAME_HUMAN, null));
@@ -154,6 +159,8 @@ public class RequestBattlePanel extends javax.swing.JPanel {
     {//GEN-HEADEREND:event_computerBattleButtonActionPerformed
          try
         {
+            AudioPlayer.play("res/select_sfx.wav");
+
             ((JButton)evt.getSource()).setEnabled(false);
             client.sendToServer(new NetworkWrapper(
                     ClientCommand.FIND_GAME_COMPUTER, null));

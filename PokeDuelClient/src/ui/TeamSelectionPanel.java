@@ -1,5 +1,6 @@
 package ui;
 
+import audio.AudioPlayer;
 import client.GameClient;
 import commands.ClientCommand;
 import java.awt.BorderLayout;
@@ -73,6 +74,8 @@ public class TeamSelectionPanel extends javax.swing.JPanel
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                AudioPlayer.play("res/select_sfx.wav");
+
                 try
                 {
                     if (selectedPokemon.size() > 0)
@@ -113,6 +116,8 @@ public class TeamSelectionPanel extends javax.swing.JPanel
             @Override
             public void mousePressed(MouseEvent evt)
             {
+                AudioPlayer.play("res/select_sfx.wav");
+
                 Point clickPoint = evt.getPoint();
                 JTable table = (JTable) evt.getSource();
                 int row = table.rowAtPoint(clickPoint);

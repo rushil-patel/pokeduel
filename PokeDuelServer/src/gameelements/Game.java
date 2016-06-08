@@ -179,26 +179,30 @@ public class Game
         poke2Attack = poke2Attack * (1 / poke2.numTypes);
         poke1Defense = poke1Defense * (1 / poke1.numTypes);
 
-        if ((poke1Attack - poke2Defense) > (poke2Attack - poke1Defense))
+        if ((poke1Defense - poke2Attack) > (poke2Defense - poke2Attack))
         {
 
-            //update pokemon status
+            //update losing pokemon status
             p2.updatePokemon(poke2);
             return p1;
-        } else if ((poke1Attack - poke2Defense) < (poke2Attack - poke1Defense))
+        } else if ((poke1Defense - poke2Attack) < (poke2Defense - poke2Attack))
+
         {
-            //update pokemon status
+            //update losing pokemon status
             p1.updatePokemon(poke1);
             return p2;
         } else
         {
-            int value = new Random().nextInt(2);
-
-            if (value > 1)
-            {
+            int value = new Random().nextInt(1000);
+            System.out.println(value);
+            value = value/500;
+            if (value >= 1)
+            {   
+                p1.updatePokemon(poke1);
                 return p2;
             } else
             {
+                p2.updatePokemon(poke2);
                 return p1;
             }
         }

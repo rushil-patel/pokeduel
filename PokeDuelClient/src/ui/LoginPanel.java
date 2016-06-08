@@ -1,11 +1,16 @@
 package ui;
 
+import audio.AudioPlayer;
 import client.GameClient;
 import commands.ClientCommand;
 import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import wrappers.NetworkWrapper;
 
 /*
@@ -26,6 +31,17 @@ public class LoginPanel extends javax.swing.JPanel {
     public LoginPanel(GameClient client) {
         this.client = client;
         initComponents();
+        try
+        {
+            Font font = java.awt.Font.createFont(Font.TRUETYPE_FONT, new java.io.File("res/Pokemon Solid.ttf"));
+            font = font.deriveFont(30);
+        } catch (FontFormatException ex)
+        {
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -38,14 +54,11 @@ public class LoginPanel extends javax.swing.JPanel {
     private void initComponents()
     {
 
-        welcomeText = new javax.swing.JLabel();
         loginTextField = new javax.swing.JTextField();
         loginButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        usernameLabel = new javax.swing.JLabel();
 
-        welcomeText.setFont(new java.awt.Font("Ubuntu", 0, 36)); // NOI18N
-        welcomeText.setText("Welcome to Pokeduel!");
-
-        loginTextField.setText("Enter username");
         loginTextField.setMaximumSize(new java.awt.Dimension(6, 20));
         loginTextField.addActionListener(new java.awt.event.ActionListener()
         {
@@ -64,32 +77,38 @@ public class LoginPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\rushi_000\\Desktop\\School\\CPE365\\finalproject\\pokeduel\\PokeDuelClient\\res\\title.png")); // NOI18N
+
+        usernameLabel.setText("Username");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(104, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(101, 101, 101))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(216, 216, 216)
-                        .addComponent(welcomeText))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(302, 302, 302)
-                        .addComponent(loginTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(loginButton)))
-                .addContainerGap(222, Short.MAX_VALUE))
+                .addGap(302, 302, 302)
+                .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(loginTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(loginButton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(220, Short.MAX_VALUE)
-                .addComponent(welcomeText)
-                .addGap(95, 95, 95)
+                .addGap(54, 54, 54)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loginTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(loginButton))
-                .addGap(212, 212, 212))
+                    .addComponent(loginButton)
+                    .addComponent(usernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(261, 261, 261))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -99,10 +118,13 @@ public class LoginPanel extends javax.swing.JPanel {
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String username = this.loginTextField.getText();
+        
+        AudioPlayer.play("res/select_sfx.wav");
         if ((username.length() == 0) 
                 || username.replaceAll("[a-zA-Z]","").length() != 0)
         {
-            //display user name restrictions
+            JOptionPane.showMessageDialog(((JButton)evt.getSource()).getParent(), 
+                    "Valid usernames containt only alphabetic characters.");
         }
         else
         {
@@ -119,8 +141,9 @@ public class LoginPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_loginButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loginButton;
     private javax.swing.JTextField loginTextField;
-    private javax.swing.JLabel welcomeText;
+    private javax.swing.JLabel usernameLabel;
     // End of variables declaration//GEN-END:variables
 }

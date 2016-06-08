@@ -1,5 +1,6 @@
 package ui;
 
+import audio.AudioPlayer;
 import client.GameClient;
 import commands.ClientCommand;
 import commands.ServerCommand;
@@ -68,6 +69,8 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
+                    AudioPlayer.play("res/select_sfx.wav");
+
                     JButton buttonClicked = (JButton) e.getSource();
                     List<JButton> playerButtonList = Arrays.asList(playerTeamButtons);
                     List<JButton> oppButtonList = Arrays.asList(opponentTeamButtons);
