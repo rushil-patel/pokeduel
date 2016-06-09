@@ -144,7 +144,7 @@ public class DBConnection {
             statement = conn.createStatement();
             results = statement.executeQuery(query);
             while (results.next()) {
-                player = new Player(results.getInt("id"), results.getString("username"));
+                player = new Player(results.getInt("id"), results.getString("username"), results.getInt("win"), results.getInt("loss"));
             }
         }
         catch (SQLException sqlEx) {
