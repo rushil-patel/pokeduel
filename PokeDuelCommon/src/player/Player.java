@@ -20,7 +20,7 @@ public class Player implements Serializable
     public Pokemon currentPokemon;
     public int wins;
     public int losses;
-
+    
     public Player(int id, String username, ConnectionToClient client, int wins, int losses)
     {
         this.id = id;
@@ -37,6 +37,8 @@ public class Player implements Serializable
         this.username = username;
         this.client = null;
         this.team = new ArrayList<>();
+        this.wins = wins;
+        this.losses = losses;
     }
 
     public int getId()

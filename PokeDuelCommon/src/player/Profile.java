@@ -30,7 +30,7 @@ public class Profile implements Serializable
             team.add(new Pokemon(pokemon));
         }
         this.currentPokemon = player.currentPokemon;
-        this.wins = player.wins;
-        this.losses = player.losses;
+        wins = player.wins;
+        losses = player.losses;
     }
 }

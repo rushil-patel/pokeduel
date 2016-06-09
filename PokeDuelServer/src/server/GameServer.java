@@ -223,7 +223,52 @@ public class GameServer extends ObservableServer
     @Override
     public void clientDisconnected(ConnectionToClient client)
     {
+        Player disconnectedPlayer = connectionUsers.get(client);
+        Game game = gMan.getGameForPlayer(disconnectedPlayer);
+        if (game != null && game.state != GameStates.GAME_OVER)
+        {
+            try
+            {
+                DBConnection.updateLoss(disconnectedPlayer.getName());
+                game.getPlayers().remove(disconnectedPlayer);
+                if(game.getPlayers().size() > 0)
+                {
+                    Player remainingPlayer = game.getPlayers().get(0);
+                    DBConnection.updateWin(remainingPlayer.getName());
+                    updateWinsLosses(remainingPlayer);
+                    game.getPlayers().remove(remainingPlayer);
+                    NetworkWrapper net = new NetworkWrapper(ServerCommand.PLAYER_LEFT, disconnectedPlayer.getName() + "has disconnected. You win");
+                    remainingPlayer.send(net);
+                    
+                    NetworkWrapper resetToMenu = new NetworkWrapper(ServerCommand.SUCCESS_LOGIN, remainingPlayer.getProfile());
+                    remainingPlayer.send(resetToMenu);
+                }
+                else
+                {
+                    gMan.removeGame(game);
+                }
+            } catch (Exception ex)
+            {
+                Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
         removeFromMaps(client);
+    }
+    
+    private void updateWinsLosses(Player player)
+    {
+        try
+        {
+            Player updatedPlayer = DBConnection.getUser(player.getName());
+            player.wins = updatedPlayer.wins;
+            player.losses = updatedPlayer.losses;
+            
+        } catch (Exception ex)
+        {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
     }
 
     public static void main(String[] args)

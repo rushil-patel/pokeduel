@@ -1,12 +1,15 @@
 package gameelements;
 
 import commands.ServerCommand;
+import connectors.DBConnection;
 import pokemon.Pokemon;
 import pokemon.Stats;
 import player.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import wrappers.NetworkWrapper;
 
 public class Game
@@ -41,77 +44,116 @@ public class Game
             state = GameStates.WAITING_ONE_BATTLE;
         } else if (state == GameStates.WAITING_ONE_BATTLE)
         {
-            players.get(0).send(
-                    new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
-                    players.get(0).getProfile()));
-            players.get(1).send(
-                    new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
-                    players.get(1).getProfile()));
-            players.get(0).send(
-                    new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
-                    players.get(1).getProfile()));
-            players.get(1).send(
-                    new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
-                    players.get(0).getProfile()));
-
-            Player winner = doBattle();
-
-            players.get(0).send(
-                    new NetworkWrapper(ServerCommand.BATTLE_RESULT,
-                    winner.getProfile()));
-            players.get(1).send(
-                    new NetworkWrapper(ServerCommand.BATTLE_RESULT,
-                    winner.getProfile()));
-            
-            
-            
-            //Reset both players pokemon selection
-            players.get(0).currentPokemon = null;
-            players.get(1).currentPokemon = null;
-            
-            players.get(0).send(
-                    new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
-                    players.get(0).getProfile()));
-            players.get(1).send(
-                    new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
-                    players.get(1).getProfile()));
-            players.get(0).send(
-                    new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
-                    players.get(1).getProfile()));
-            players.get(1).send(
-                    new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
-                    players.get(0).getProfile()));
-            
-            ///FUTURE UPDATE include new ranking in the message
-            if(players.get(0).alivePokemons() == 0)
+            try
             {
-               players.get(0).send(
-                    new NetworkWrapper(ServerCommand.GAME_OVER, players.get(1).getName() + " wins the battle."));
-               players.get(1).send(
-                    new NetworkWrapper(ServerCommand.GAME_OVER, "You won the battle."));
-               state = GameStates.GAME_OVER;
-               
-               players.get(0).send(new NetworkWrapper(ServerCommand.SUCCESS_LOGIN, players.get(0).getProfile()));
-               players.get(1).send(new NetworkWrapper(ServerCommand.SUCCESS_LOGIN, players.get(1).getProfile()));
-            }
-            else if (players.get(1).alivePokemons() == 0)
-            {
-               players.get(1).send(
-                    new NetworkWrapper(ServerCommand.GAME_OVER, players.get(0).getName() + " wins the battle."));
-               players.get(0).send(
-                    new NetworkWrapper(ServerCommand.GAME_OVER, "You won the battle."));
-               state = GameStates.GAME_OVER;
-               
-               players.get(0).send(new NetworkWrapper(ServerCommand.SUCCESS_LOGIN, players.get(0).getProfile()));
-               players.get(1).send(new NetworkWrapper(ServerCommand.SUCCESS_LOGIN, players.get(1).getProfile()));
-            }
-            else
-            {
-                state = GameStates.WAITING_TWO_BATTLE;
+                players.get(0).send(
+                        new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
+                        players.get(0).getProfile()));
+                players.get(1).send(
+                        new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
+                        players.get(1).getProfile()));
+                players.get(0).send(
+                        new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
+                        players.get(1).getProfile()));
+                players.get(1).send(
+                        new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
+                        players.get(0).getProfile()));
 
-                players.get(0).requestSelection();
-                players.get(1).requestSelection();
+                Player winner = doBattle();
+                Player loser;
+
+                if (players.get(0).getId() == winner.getId())
+                {
+                    loser = players.get(1);
+                } else
+                {
+                    loser = players.get(0);
+                }
+
+
+                players.get(0).send(
+                        new NetworkWrapper(ServerCommand.BATTLE_RESULT,
+                        winner.getProfile()));
+                players.get(1).send(
+                        new NetworkWrapper(ServerCommand.BATTLE_RESULT,
+                        winner.getProfile()));
+
+
+
+                //Reset both players pokemon selection
+                players.get(0).currentPokemon = null;
+                players.get(1).currentPokemon = null;
+
+                players.get(0).send(
+                        new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
+                        players.get(0).getProfile()));
+                players.get(1).send(
+                        new NetworkWrapper(ServerCommand.PLAYER_UPDATE,
+                        players.get(1).getProfile()));
+                players.get(0).send(
+                        new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
+                        players.get(1).getProfile()));
+                players.get(1).send(
+                        new NetworkWrapper(ServerCommand.OPPONENT_UPDATE,
+                        players.get(0).getProfile()));
+
+                ///FUTURE UPDATE include new ranking in the message
+                if (players.get(0).alivePokemons() == 0)
+                {
+                    players.get(0).send(
+                            new NetworkWrapper(ServerCommand.GAME_OVER, players.get(1).getName() + " wins the battle."));
+                    players.get(1).send(
+                            new NetworkWrapper(ServerCommand.GAME_OVER, "You won the battle."));
+                    state = GameStates.GAME_OVER;
+
+                    DBConnection.updateLoss(loser.getName());
+                    DBConnection.updateWin(winner.getName());
+                    updateWinsLosses(loser);
+                    updateWinsLosses(winner);
+
+                    players.get(0).send(new NetworkWrapper(ServerCommand.SUCCESS_LOGIN, players.get(0).getProfile()));
+                    players.get(1).send(new NetworkWrapper(ServerCommand.SUCCESS_LOGIN, players.get(1).getProfile()));
+                } else if (players.get(1).alivePokemons() == 0)
+                {
+                    players.get(1).send(
+                            new NetworkWrapper(ServerCommand.GAME_OVER, players.get(0).getName() + " wins the battle."));
+                    players.get(0).send(
+                            new NetworkWrapper(ServerCommand.GAME_OVER, "You won the battle."));
+                    state = GameStates.GAME_OVER;
+
+                    DBConnection.updateLoss(loser.getName());
+                    DBConnection.updateWin(winner.getName());
+                    updateWinsLosses(loser);
+                    updateWinsLosses(winner);
+
+                    players.get(0).send(new NetworkWrapper(ServerCommand.SUCCESS_LOGIN, players.get(0).getProfile()));
+                    players.get(1).send(new NetworkWrapper(ServerCommand.SUCCESS_LOGIN, players.get(1).getProfile()));
+                } else
+                {
+                    state = GameStates.WAITING_TWO_BATTLE;
+
+                    players.get(0).requestSelection();
+                    players.get(1).requestSelection();
+                }
+            } catch (Exception ex)
+            {
+                Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+
+    }
+
+    private void updateWinsLosses(Player player)
+    {
+        try
+        {
+            Player updatedPlayer = DBConnection.getUser(player.getName());
+            player.wins = updatedPlayer.wins;
+            player.losses = updatedPlayer.losses;
+
+        } catch (Exception ex)
+        {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -186,7 +228,6 @@ public class Game
             p2.updatePokemon(poke2);
             return p1;
         } else if ((poke1Defense - poke2Attack) < (poke2Defense - poke2Attack))
-
         {
             //update losing pokemon status
             p1.updatePokemon(poke1);
@@ -195,9 +236,9 @@ public class Game
         {
             int value = new Random().nextInt(1000);
             System.out.println(value);
-            value = value/500;
+            value = value / 500;
             if (value >= 1)
-            {   
+            {
                 p1.updatePokemon(poke1);
                 return p2;
             } else

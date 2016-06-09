@@ -21,9 +21,9 @@ public class ComputerPlayer extends Player
 
     Game game;
 
-    public ComputerPlayer(int id, String name, Game game)
+    public ComputerPlayer(int id, String name, Game game, int wins, int losses)
     {
-        super(id, name);
+        super(id, name, wins, losses);
         this.game = game;
         
     }

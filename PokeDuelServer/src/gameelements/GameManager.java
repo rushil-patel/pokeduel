@@ -27,7 +27,7 @@ public class GameManager
     public void addPlayerToComputerGame(Player player)
     {
         Game game = new Game(new ArrayList());
-        ComputerPlayer com = new ComputerPlayer(-1, "Computer", game);
+        ComputerPlayer com = new ComputerPlayer(-1, "Computer", game, 0, 0);
         game.addPlayer(player);
         game.addPlayer(com);
         game.state = GameStates.WAITING_TWO_TEAMS;
