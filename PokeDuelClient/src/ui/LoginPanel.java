@@ -111,10 +111,10 @@ public class LoginPanel extends javax.swing.JPanel {
         
         AudioPlayer.play("res/select_sfx.wav", 0.0f);
         if ((username.length() == 0) 
-                || username.replaceAll("[a-zA-Z]","").length() != 0)
+                || username.replaceAll("[a-zA-Z]","").length() != 0 || username.length() >= 10)
         {
             JOptionPane.showMessageDialog(((JButton)evt.getSource()).getParent(), 
-                    "Valid usernames containt only alphabetic characters.");
+                    "Valid usernames containt only alphabetic characters and must be less than 10 characters.");
         }
         else
         {

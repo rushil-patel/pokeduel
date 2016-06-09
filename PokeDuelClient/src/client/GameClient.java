@@ -112,6 +112,7 @@ public class GameClient extends ObservableClient
                     JOptionPane.showMessageDialog(displayFrame.getContentPane(), (String)net.getObject());
                     break;
                 case ERROR_LOGIN:
+                    JOptionPane.showMessageDialog(displayFrame.getContentPane(), (String)net.getObject());
                     break;
                 case BATTLE_RESULT:
                     bModel.setRoundWinner((Profile) net.getObject());
