@@ -223,6 +223,23 @@ public class GameServer extends ObservableServer
     @Override
     public void clientDisconnected(ConnectionToClient client)
     {
+        Player disconnectedPlayer = connectionUsers.get(client);
+        Game game = gMan.getGameForPlayer(disconnectedPlayer);
+        if (game != null && game.state != GameStates.GAME_OVER)
+        {
+            game.getPlayers().remove(disconnectedPlayer);
+            if(game.getPlayers().size() > 0)
+            {
+                Player remainingPlayer = game.getPlayers().get(0);
+                NetworkWrapper net = new NetworkWrapper(ServerCommand.PLAYER_LEFT, disconnectedPlayer + "has disconnected. You win");
+                remainingPlayer.send(net);
+            }
+            else
+            {
+                gMan.removeGame(game);
+            }
+        }
+        
         removeFromMaps(client);
     }
 

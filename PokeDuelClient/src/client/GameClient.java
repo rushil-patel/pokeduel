@@ -109,6 +109,7 @@ public class GameClient extends ObservableClient
                     this.sendToServer(new NetworkWrapper(ClientCommand.LEAVE_GAME, null));
                     break;
                 case PLAYER_LEFT:
+                    JOptionPane.showMessageDialog(displayFrame.getContentPane(), (String)net.getObject());
                     break;
                 case ERROR_LOGIN:
                     break;
@@ -180,7 +181,7 @@ public class GameClient extends ObservableClient
         String hostaddr = "localhost";
         int port = 6666;
         GameClient client = new GameClient(hostaddr, port);
-        AudioPlayer.play("res/bgmusic.wav", -40.0f);
+        AudioPlayer.play("res/bgmusic.wav", -35.0f);
         try
         {
             client.openConnection();
