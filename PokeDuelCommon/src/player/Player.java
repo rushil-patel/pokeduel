@@ -31,7 +31,7 @@ public class Player implements Serializable
         this.losses = losses;
     }
 
-    public Player(int id, String username)
+    public Player(int id, String username, int wins, int losses)
     {
         this.id = id;
         this.username = username;
