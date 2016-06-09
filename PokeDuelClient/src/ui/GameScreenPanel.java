@@ -20,6 +20,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -73,7 +74,7 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
                 @Override
                 public void actionPerformed(ActionEvent e)
                 {
-                    AudioPlayer.play("res/select_sfx.wav", 0.0f);
+                    AudioPlayer.play("select_sfx.wav", 0.0f);
 
                     JButton buttonClicked = (JButton) e.getSource();
                     List<JButton> playerButtonList = Arrays.asList(playerTeamButtons);
@@ -100,13 +101,13 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
 
     private void doSelectPokemon(Pokemon chosen)
     {
-        System.out.println("Selected: " + chosen.name);
         try
         {
             NetworkWrapper net = new NetworkWrapper(ClientCommand.GIVE_BATTLE_SELECT,
                     chosen);
             client.sendToServer(net);
-            playerSelectionLabel.setIcon(new ImageIcon("res/" + chosen.sprite));
+            BufferedImage buff = ImageIO.read(this.getClass().getResourceAsStream("/"+chosen.sprite));
+            playerSelectionLabel.setIcon(new ImageIcon(buff));
         } catch (IOException ex)
         {
             Logger.getLogger(GameScreenPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -298,20 +299,27 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
         {
             for (idx = 0; idx < bModel.playerTeam.size(); idx++)
             {
-                ImageIcon icon = new ImageIcon("res/" + bModel.playerTeam.get(idx).sprite);
-                if (!bModel.playerTeam.get(idx).isAlive)
+                try
                 {
-                    Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-                    icon = new ImageIcon(smallImage);
-                    playerTeamButtons[idx].setIcon(icon);
-                    playerTeamButtons[idx].setDisabledIcon(null);
-                    playerTeamButtons[idx].setEnabled(false);
-                } else
+                    BufferedImage buff = ImageIO.read(this.getClass().getResourceAsStream("/"+bModel.playerTeam.get(idx).sprite));
+                    ImageIcon icon = new ImageIcon(buff);
+                    if (!bModel.playerTeam.get(idx).isAlive)
+                    {
+                        Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                        icon = new ImageIcon(smallImage);
+                        playerTeamButtons[idx].setIcon(icon);
+                        playerTeamButtons[idx].setDisabledIcon(null);
+                        playerTeamButtons[idx].setEnabled(false);
+                    } else
+                    {
+                        Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                        icon = new ImageIcon(smallImage);
+                        playerTeamButtons[idx].setIcon(icon);
+                        playerTeamButtons[idx].setDisabledIcon(icon);
+                    }
+                } catch (IOException ex)
                 {
-                    Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-                    icon = new ImageIcon(smallImage);
-                    playerTeamButtons[idx].setIcon(icon);
-                    playerTeamButtons[idx].setDisabledIcon(icon);
+                    Logger.getLogger(GameScreenPanel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             for (; idx < playerTeamButtons.length; idx++)
@@ -323,21 +331,28 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
         {
             for (idx = 0; idx < bModel.opponentTeam.size(); idx++)
             {
-                ImageIcon icon = new ImageIcon("res/pokeball.png");
-                if (!bModel.opponentTeam.get(idx).isAlive)
+                try
                 {
-          
-                    Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-                    icon = new ImageIcon(smallImage);
-                    opponentTeamButtons[idx].setIcon(icon);
-                    opponentTeamButtons[idx].setDisabledIcon(null);
-                    opponentTeamButtons[idx].setEnabled(false);
-                } else
+                    BufferedImage buff = ImageIO.read(this.getClass().getResourceAsStream("/pokeball.png"));
+                    ImageIcon icon = new ImageIcon(buff);
+                    if (!bModel.opponentTeam.get(idx).isAlive)
+                    {
+              
+                        Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                        icon = new ImageIcon(smallImage);
+                        opponentTeamButtons[idx].setIcon(icon);
+                        opponentTeamButtons[idx].setDisabledIcon(null);
+                        opponentTeamButtons[idx].setEnabled(false);
+                    } else
+                    {
+                        Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
+                        icon = new ImageIcon(smallImage);
+                        opponentTeamButtons[idx].setIcon(icon);
+                        opponentTeamButtons[idx].setDisabledIcon(icon);
+                    }
+                } catch (IOException ex)
                 {
-                    Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
-                    icon = new ImageIcon(smallImage);
-                    opponentTeamButtons[idx].setIcon(icon);
-                    opponentTeamButtons[idx].setDisabledIcon(icon);
+                    Logger.getLogger(GameScreenPanel.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -349,7 +364,13 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
 
             if (bModel.opponentSelection != null)
             {
-                OpponentSelectionLabel.setIcon(new ImageIcon("res/" + bModel.opponentSelection.sprite));
+                try
+                {
+                    OpponentSelectionLabel.setIcon(new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/"+bModel.opponentSelection.sprite))));
+                } catch (IOException ex)
+                {
+                    Logger.getLogger(GameScreenPanel.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         } else if (((ServerCommand) arg) == ServerCommand.BATTLE_RESULT)
         {
@@ -384,7 +405,7 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
                 try
                 {
                     ImageIcon origIcon = (ImageIcon) pokeLabel.getIcon();
-                    AudioPlayer.play("res/critical_hit_sfx.wav", 0.0f);
+                    AudioPlayer.play("critical_hit_sfx.wav", 0.0f);
                     pokeLabel.setIcon(null);
                     Thread.sleep(70);
                     pokeLabel.setIcon(origIcon);
@@ -427,7 +448,10 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
         int idx = 0;
          for (idx = 0; idx < bModel.playerTeam.size(); idx++)
             {
-                ImageIcon icon = new ImageIcon("res/" + bModel.playerTeam.get(idx).sprite);
+            try
+            {
+                BufferedImage buff = ImageIO.read(this.getClass().getResourceAsStream("/"+bModel.playerTeam.get(idx).sprite));
+                ImageIcon icon = new ImageIcon(buff);
                 if (!bModel.playerTeam.get(idx).isAlive)
                 {
                     Image smallImage = icon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
@@ -444,6 +468,10 @@ public class GameScreenPanel extends javax.swing.JPanel implements Observer
                     playerTeamButtons[idx].setEnabled(true);
                     playerTeamButtons[idx].setDisabledIcon(icon);
                 }
+            } catch (IOException ex)
+            {
+                Logger.getLogger(GameScreenPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
             }
 
     

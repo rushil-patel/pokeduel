@@ -16,6 +16,7 @@ import connectors.DBConnection;
 import gameelements.GameStates;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import player.ComputerPlayer;
 import pokemon.Pokemon;
 import wrappers.NetworkWrapper;
 
@@ -89,7 +90,6 @@ public class GameServer extends ObservableServer
             NetworkWrapper pokemonData = new NetworkWrapper(
                     ServerCommand.POKEMON_DATA, pokemonList);
             client.sendToClient(pokemonData);
-            System.out.println("sent data");
         } catch (Exception ex)
         {
             Logger.getLogger(GameServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -260,9 +260,13 @@ public class GameServer extends ObservableServer
     {
         try
         {
-            Player updatedPlayer = DBConnection.getUser(player.getName());
-            player.wins = updatedPlayer.wins;
-            player.losses = updatedPlayer.losses;
+            if(!(player instanceof ComputerPlayer))
+            {
+
+                Player updatedPlayer = DBConnection.getUser(player.getName());
+                player.wins = updatedPlayer.wins;
+                player.losses = updatedPlayer.losses;
+            }
             
         } catch (Exception ex)
         {

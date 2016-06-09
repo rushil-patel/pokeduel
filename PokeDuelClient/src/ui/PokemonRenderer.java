@@ -2,6 +2,12 @@ package ui;
 
 import java.awt.Component;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -22,11 +28,20 @@ public class PokemonRenderer extends DefaultTableCellRenderer
         if (poke != null)
         {
 
-            ImageIcon icon = new ImageIcon("res/" + poke.sprite);
-            ImageIcon smallIcon = new ImageIcon(
-                    icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH));
+            ImageIcon icon = new ImageIcon("/" + poke.sprite);
+            try
+            {
+                BufferedImage buff = ImageIO.read(this.getClass().getResourceAsStream("/"+poke.sprite));
+                ImageIcon smallIcon = new ImageIcon(
+                    buff.getScaledInstance(80, 80, Image.SCALE_SMOOTH));
             setIcon(smallIcon);
             setText(null);
+            } catch (IOException ex)
+            {
+                Logger.getLogger(PokemonRenderer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+
         } else
         {
             setIcon(null);

@@ -109,7 +109,7 @@ public class LoginPanel extends javax.swing.JPanel {
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
         String username = this.loginTextField.getText();
         
-        AudioPlayer.play("res/select_sfx.wav", 0.0f);
+        AudioPlayer.play("select_sfx.wav", 0.0f);
         if ((username.length() == 0) 
                 || username.replaceAll("[a-zA-Z]","").length() != 0 || username.length() >= 10)
         {

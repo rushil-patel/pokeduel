@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.io.IOException;
 import java.sql.BatchUpdateException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,7 +83,6 @@ public class GameClient extends ObservableClient
         try
         {
             NetworkWrapper net = (NetworkWrapper) message;
-            System.out.println(net.getCommand().toString());
             switch ((ServerCommand) net.getCommand())
             {
                 case POKEMON_DATA:
@@ -181,8 +181,19 @@ public class GameClient extends ObservableClient
     {
         String hostaddr = "localhost";
         int port = 6666;
+        
+        List<String> argList = Arrays.asList(args);
+        
+        if (argList.contains("-c"))
+        {
+            int index = argList.indexOf("-c");
+            if (argList.size() > index + 1)
+            {
+                hostaddr = argList.get(index+1);
+            }
+        }
         GameClient client = new GameClient(hostaddr, port);
-        AudioPlayer.play("res/bgmusic.wav", -35.0f);
+        AudioPlayer.play("bgmusic.wav", -35.0f);
         try
         {
             client.openConnection();

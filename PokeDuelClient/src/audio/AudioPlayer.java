@@ -1,6 +1,7 @@
 package audio;
 
 import java.io.*;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.*;
@@ -16,13 +17,13 @@ public class AudioPlayer
     {
         try
         {
-            File file = new File(path);
+            InputStream audioInput = AudioPlayer.class.getResourceAsStream("/"+path);
             AudioInputStream stream;
             AudioFormat format;
             DataLine.Info info;
             Clip clip;
 
-            stream = AudioSystem.getAudioInputStream(file);
+            stream = AudioSystem.getAudioInputStream(new BufferedInputStream(audioInput));
             format = stream.getFormat();
             info = new DataLine.Info(Clip.class, format);
             clip = (Clip) AudioSystem.getLine(info);

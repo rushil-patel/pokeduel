@@ -235,7 +235,6 @@ public class Game
         } else
         {
             int value = new Random().nextInt(1000);
-            System.out.println(value);
             value = value / 500;
             if (value >= 1)
             {
