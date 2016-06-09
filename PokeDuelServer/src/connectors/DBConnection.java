@@ -17,7 +17,7 @@ public class DBConnection {
         Class.forName("org.mariadb.jdbc.Driver");
 
         String dbUser = "root";
-        String dbPass = "admin";
+        String dbPass = "seongbo";
         String host = "localhost";
         String dbName = "pokedb";
 
@@ -49,6 +49,84 @@ public class DBConnection {
         checkUser("Tiger");
         Player player = getUser("Seong");*/
     }
+    
+    /*update win for a user*/
+    public static void updateLoss(String username) throws Exception {
+        Connection conn = getConnection();
+        Statement statement = null;
+        ResultSet results = null;
+        String query;
+        Player player = null;
+        
+        query = "UPDATE Users SET loss = loss + 1 WHERE "
+                + "username = '" + username + "'";
+        
+        try {
+            statement = conn.createStatement();
+            results = statement.executeQuery(query);
+        }
+        catch (SQLException sqlEx) {
+            System.err.println("Error doing query: " + sqlEx);
+            sqlEx.printStackTrace(System.err);
+        }
+        finally {
+           try {
+              if (results != null) {
+                 results.close();
+                 results = null;
+              }
+              if (statement != null) {
+                  statement.close();
+                  statement = null;
+              }
+           } 
+           catch (Exception ex) {
+              System.err.println("Error closing query: " + ex);
+              ex.printStackTrace(System.err);
+           }
+
+           close(conn);
+        }
+    }
+    
+    /*update win for a user*/
+    public static void updateWin(String username) throws Exception {
+        Connection conn = getConnection();
+        Statement statement = null;
+        ResultSet results = null;
+        String query;
+        Player player = null;
+        
+        query = "UPDATE Users SET win = win + 1 WHERE "
+                + "username = '" + username + "'";
+        
+        try {
+            statement = conn.createStatement();
+            results = statement.executeQuery(query);
+        }
+        catch (SQLException sqlEx) {
+            System.err.println("Error doing query: " + sqlEx);
+            sqlEx.printStackTrace(System.err);
+        }
+        finally {
+           try {
+              if (results != null) {
+                 results.close();
+                 results = null;
+              }
+              if (statement != null) {
+                  statement.close();
+                  statement = null;
+              }
+           } 
+           catch (Exception ex) {
+              System.err.println("Error closing query: " + ex);
+              ex.printStackTrace(System.err);
+           }
+
+           close(conn);
+        }
+    }
 
     /*Assumes the player already exists*/
     public static Player getUser(String username) throws Exception {
@@ -66,7 +144,7 @@ public class DBConnection {
             statement = conn.createStatement();
             results = statement.executeQuery(query);
             while (results.next()) {
-                player = new Player(results.getInt("id"), results.getString("username"));
+                player = new Player(results.getInt("id"), results.getString("username"), results.getInt("win"), results.getInt("loss"));
             }
         }
         catch (SQLException sqlEx) {
