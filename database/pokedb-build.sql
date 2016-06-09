@@ -1,6 +1,6 @@
 -- build all
 
-source pokedb-cleanup.sql
+source cleanup.sql
 source pokedb-setup.sql
 
 source Pokemon-insert.sql

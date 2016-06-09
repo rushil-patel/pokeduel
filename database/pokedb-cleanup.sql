@@ -1,0 +1,17 @@
+-- cleanup.sql
+
+DROP TABLE IF EXISTS MatchHistory;
+
+DROP TABLE IF EXISTS Users;
+
+DROP TABLE IF EXISTS PokemonType;
+
+DROP TABLE IF EXISTS Resistance;
+
+DROP TABLE IF EXISTS PokemonCost;
+
+DROP TABLE IF EXISTS Type;
+
+DROP TABLE IF EXISTS PokemonStats;
+
+DROP TABLE IF EXISTS Pokemon;
