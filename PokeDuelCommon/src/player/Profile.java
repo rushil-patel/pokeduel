@@ -17,6 +17,8 @@ public class Profile implements Serializable
     public final int id;
     public final List<Pokemon> team;
     public final Pokemon currentPokemon;
+    public final int wins;
+    public final int losses;
     
     public Profile(Player player)
     {
@@ -28,5 +30,7 @@ public class Profile implements Serializable
             team.add(new Pokemon(pokemon));
         }
         this.currentPokemon = player.currentPokemon;
+        this.wins = player.wins;
+        this.losses = player.losses;
     }
 }

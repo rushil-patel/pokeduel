@@ -18,13 +18,17 @@ public class Player implements Serializable
     private ArrayList<Pokemon> team;
     public ConnectionToClient client;
     public Pokemon currentPokemon;
+    public int wins;
+    public int losses;
 
-    public Player(int id, String username, ConnectionToClient client)
+    public Player(int id, String username, ConnectionToClient client, int wins, int losses)
     {
         this.id = id;
         this.username = username;
         this.client = client;
         this.team = new ArrayList<>();
+        this.wins = wins;
+        this.losses = losses;
     }
 
     public Player(int id, String username)
