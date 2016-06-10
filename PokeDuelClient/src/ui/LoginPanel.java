@@ -120,11 +120,13 @@ public class LoginPanel extends javax.swing.JPanel {
         {
             NetworkWrapper net = new NetworkWrapper(ClientCommand.LOGIN,
                     username);
+            ((JButton)evt.getSource()).setEnabled(false);
             try
             {
                 client.sendToServer(net);
             } catch (IOException ex)
             {
+                ((JButton)evt.getSource()).setEnabled(true);
                 Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

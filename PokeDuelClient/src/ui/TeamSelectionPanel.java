@@ -27,6 +27,7 @@ import javax.swing.JTable;
 import javax.swing.border.Border;
 import model.PokemonTableModel;
 import pokemon.Pokemon;
+import pokemon.Stats;
 import wrappers.NetworkWrapper;
 
 /**
@@ -102,7 +103,24 @@ public class TeamSelectionPanel extends javax.swing.JPanel
         
         this.add(titlePanel);
 
-        allPokemonTable = new PokeTable(renderer);
+        allPokemonTable = new PokeTable(renderer){
+
+            //Implement table cell tool tips.           
+            public String getToolTipText(MouseEvent e) {
+                String tip = null;
+                java.awt.Point p = e.getPoint();
+                int rowIndex = rowAtPoint(p);
+                int colIndex = columnAtPoint(p);
+
+                try {
+                    tip = getPokeTip(rowIndex, colIndex);
+                } catch (RuntimeException e1) {
+                    //catch null pointer exception if mouse is over an empty line
+                }
+
+                return tip;
+            }
+        };
         allPokemonTable.setModel(model);
         allPokemonTable.setTableHeader(null);
         allPokemonTable.setShowGrid(false);
@@ -150,6 +168,19 @@ public class TeamSelectionPanel extends javax.swing.JPanel
 
     }
 
+        
+    private String getPokeTip(int row, int col)
+    {
+        Pokemon hovered = (Pokemon) model.getValueAt(row, col);
+        String tip = "";
+        if (hovered != null)
+        {
+            tip = "Attack: " + hovered.stats[Stats.ATTACK.getValue()]
+                    + " Defense: " + hovered.stats[Stats.DEFENSE.getValue()]
+                    + " Cost: " + hovered.cost;
+        }
+        return tip;
+    }
     private void selectPokemonAt(int row, int col)
     {
         Pokemon selection = (Pokemon) model.getValueAt(row, col);

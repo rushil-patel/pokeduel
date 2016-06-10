@@ -3,6 +3,7 @@ package ui;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -45,7 +46,7 @@ public class PokeTable extends JTable
         bgImage = new ImageIcon("res" + File.separator +imageName);
         repaint();
     }
-
+    
     /**
      * Prepares the renderer by querying the data model for the
      * value and selection state
